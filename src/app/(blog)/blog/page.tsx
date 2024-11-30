@@ -2,7 +2,8 @@ import Container from "@/app/(blog)/_components/layout/Container";
 import Intro from "@/app/(blog)/_components/layout/Intro";
 import { getAllBlogs } from "@/app/(blog)/_libs/client";
 import Link from "next/link";
-import { BlogType } from "@/types/BlogType";
+import { BlogCategoryType, BlogType } from "@/types/BlogType";
+import dayjs from "dayjs";
 
 export default async function Home() {
   const data = await getAllBlogs();
@@ -19,11 +20,31 @@ export default async function Home() {
                 href={`/blog/${data.id}`}
                 className="px-2 py-5 block hover:opacity-80"
               >
-                <h2 className="text-2xl">{data.title}</h2>
-                <p className="truncate opacity-70 mb-2 text-lg">
-                  {data.content}
+                <h2 className="text-xl leading-none">{data.title}</h2>
+                <p className="truncate opacity-70 text-sm my-2">
+                  {data.content.replace(/<[^>]+>/g, "").slice(0, 50)}
                 </p>
-                <small>2024/11/12</small>
+                <div className="flex gap-2">
+                  <p className="leading-none">
+                    <small>
+                      {dayjs(data.publishedAt).format("YYYY/MM/DD")}
+                    </small>
+                  </p>
+                  {data.category.length !== 0 && (
+                    <p className="leading-none mb-1">
+                      <small>
+                        {data.category.map((cat: BlogCategoryType) => (
+                          <span
+                            key={cat.id}
+                            className="mr-2 border border-gray-600 rounded-md px-2"
+                          >
+                            {cat.title}
+                          </span>
+                        ))}
+                      </small>
+                    </p>
+                  )}
+                </div>
               </Link>
             </li>
           ))}

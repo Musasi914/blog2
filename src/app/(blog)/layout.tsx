@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Zen_Kaku_Gothic_New } from "next/font/google";
 
 const zenKaku = Zen_Kaku_Gothic_New({
-  weight: ["300", "400", "700", "900"],
+  weight: ["300", "400", "700"],
   subsets: ["latin"],
   variable: "--font-zen-gothic",
 });
@@ -23,7 +23,7 @@ export default function BlogLayout({
   return (
     <html lang="ja">
       <body className={`${zenKaku.variable} antialiased`}>
-        <div className="font-zengothic grid grid-rows-[auto_1fr_auto] min-h-screen w-full">
+        <div className="font-zengothic md:grid grid-rows-[auto_1fr_auto] min-h-screen w-full">
           <header className="py-3 mx-auto">
             <div className="flex justify-center gap-5 mx-auto w-11/12 max-w-screen-xl uppercase">
               <Link href={"/blog"}>blog</Link>
