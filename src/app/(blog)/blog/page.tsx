@@ -21,10 +21,10 @@ export default async function Home() {
                 className="px-2 py-5 block hover:opacity-80"
               >
                 <h2 className="text-xl leading-none">{data.title}</h2>
-                <p className="truncate opacity-70 text-sm my-2">
+                <p className="truncate opacity-70 md:text-sm my-2">
                   {data.content.replace(/<[^>]+>/g, "").slice(0, 50)}
                 </p>
-                <div className="flex gap-2">
+                <div className="flex gap-x-2 flex-wrap-reverse">
                   <p className="leading-none">
                     <small>
                       {dayjs(data.publishedAt).format("YYYY/MM/DD")}
@@ -36,7 +36,7 @@ export default async function Home() {
                         {data.category.map((cat: BlogCategoryType) => (
                           <span
                             key={cat.id}
-                            className="mr-2 border border-gray-600 rounded-md px-2"
+                            className="mr-2 border border-gray-600 rounded-md px-2 break-keep inline-block"
                           >
                             {cat.title}
                           </span>

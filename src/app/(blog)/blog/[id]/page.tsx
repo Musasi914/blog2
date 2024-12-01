@@ -2,7 +2,36 @@ import { getAllIds, getPost } from "@/app/(blog)/_libs/client";
 import Container from "../../_components/layout/Container";
 import dayjs from "dayjs";
 import { BlogCategoryType } from "@/types/BlogType";
-import styles from "./_style/blogpost.module.css";
+import ConvertHtml from "../../_components/layout/ConvertHtml";
+import type { Metadata, ResolvingMetadata } from "next";
+
+type Props = {
+  params: Promise<{ id: string }>;
+};
+export async function generateMetadata({
+  params,
+}: Props): // parent: ResolvingMetadata
+Promise<Metadata> {
+  // ルートパラメータを読み取る
+  const id = (await params).id;
+
+  // データをフェッチする
+  const blog = await getPost(id);
+
+  // 親メタデータにアクセスして拡張する（置換しない）ことができます
+  // const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: blog.title,
+    description: blog.content.replace(/<[^>]+>/g, "").slice(0, 50),
+    openGraph: {
+      title: blog.title,
+      description: blog.content.replace(/<[^>]+>/g, "").slice(0, 50),
+      // images: ["/some-specific-page-image.jpg", ...previousImages],
+    },
+  };
+}
+
 export default async function BlogPostPage({
   params,
 }: {
@@ -37,11 +66,8 @@ export default async function BlogPostPage({
           </small>
         </p>
       </div>
-      <div>
-        <div
-          className={styles.post}
-          dangerouslySetInnerHTML={{ __html: blog.content }}
-        />
+      <div className="my-10">
+        <ConvertHtml htmlStr={blog.content} />
       </div>
     </Container>
   );

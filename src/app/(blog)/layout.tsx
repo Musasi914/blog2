@@ -10,9 +10,15 @@ const zenKaku = Zen_Kaku_Gothic_New({
 });
 
 export const metadata: Metadata = {
-  title: "Matsu Tech",
+  title: {
+    default: "Matsu Tech",
+    template: `%s | Matsu Tech`,
+  },
   description:
     "フロントエンドエンジニアに憧れを持つ社会不適合者のブログ。ニートになって勉強する期間が必要ではないかと思っている。",
+  alternates: {
+    canonical: "https://blog2-one-phi.vercel.app/blog",
+  },
 };
 
 export default function BlogLayout({
@@ -28,6 +34,7 @@ export default function BlogLayout({
             <div className="flex justify-center gap-5 mx-auto w-11/12 max-w-screen-xl uppercase">
               <Link href={"/blog"}>blog</Link>
               <Link href={"/blog/labo"}>labo</Link>
+              <Link href={"/blog/about"}>about</Link>
             </div>
           </header>
           <main>{children}</main>

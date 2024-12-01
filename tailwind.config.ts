@@ -10,6 +10,7 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        customgray: "var(--color-gray)",
       },
       fontFamily: {
         zengothic: ["var(--font-zen-gothic)"],
