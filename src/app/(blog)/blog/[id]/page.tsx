@@ -1,4 +1,4 @@
-import { getAllIds, getPost } from "@/app/(blog)/_libs/client";
+import { getAllIds, getPost } from "@/app/(blog)/_libs/microCMSFunc";
 import Container from "../../_components/layout/Container";
 import dayjs from "dayjs";
 import { BlogCategoryType } from "@/types/BlogType";

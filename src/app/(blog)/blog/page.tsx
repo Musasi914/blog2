@@ -1,9 +1,10 @@
 import Container from "@/app/(blog)/_components/layout/Container";
 import Intro from "@/app/(blog)/_components/layout/Intro";
-import { getAllBlogs } from "@/app/(blog)/_libs/client";
+import { getAllBlogs } from "@/app/(blog)/_libs/microCMSFunc";
 import Link from "next/link";
 import { BlogCategoryType, BlogType } from "@/types/BlogType";
 import dayjs from "dayjs";
+import ListUnderline from "../_components/common/List/ListUnderline";
 
 export default async function Home() {
   const data = await getAllBlogs();
@@ -15,7 +16,7 @@ export default async function Home() {
       <Container>
         <ul>
           {data.map((data: BlogType) => (
-            <li key={data.id} className="border-b border-gray-400">
+            <ListUnderline key={data.id}>
               <Link
                 href={`/blog/${data.id}`}
                 className="px-2 py-5 block hover:opacity-80"
@@ -46,7 +47,7 @@ export default async function Home() {
                   )}
                 </div>
               </Link>
-            </li>
+            </ListUnderline>
           ))}
         </ul>
       </Container>
