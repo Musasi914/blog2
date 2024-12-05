@@ -47,12 +47,11 @@ export default async function BlogPostPage({
   return (
     <Container>
       <div className="mt-10 border-b border-gray-500 py-5">
-        <h1 className="text-2xl">{blog.title}</h1>
+        <h1 className="text-2xl mb-2">{blog.title}</h1>
         {blog.category.length !== 0 && (
-          <p className="mr-4">
-            カテゴリ：
+          <p className="mr-4 text-sm">
             {blog.category.map((cat: BlogCategoryType) => (
-              <span key={cat.id} className="mr-2">
+              <span key={cat.id} className="mr-2 bg-customgray px-2 rounded-sm">
                 {cat.title}
               </span>
             ))}

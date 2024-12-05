@@ -37,7 +37,7 @@ export default async function Home() {
                         {data.category.map((cat: BlogCategoryType) => (
                           <span
                             key={cat.id}
-                            className="mr-2 border border-gray-600 rounded-md px-2 break-keep inline-block"
+                            className="mr-2 py-1 rounded-sm px-2 break-keep inline-block bg-customgray"
                           >
                             {cat.title}
                           </span>
