@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "../globals.css";
-import Link from "next/link";
 import { Zen_Kaku_Gothic_New } from "next/font/google";
+import ReactLenis from "lenis/react";
 import Header from "./_components/layout/Header";
 
 const zenKaku = Zen_Kaku_Gothic_New({
@@ -22,9 +22,11 @@ export default function BlogLayout({
   return (
     <html lang="ja">
       <body className={`${zenKaku.variable} antialiased`}>
-        <Header />
-        <main className="">{children}</main>
-        <footer>&copy; 2024 matsutech</footer>
+        <ReactLenis root>
+          <Header />
+          <main className="">{children}</main>
+          <footer>&copy; 2024 matsutech</footer>
+        </ReactLenis>
       </body>
     </html>
   );
