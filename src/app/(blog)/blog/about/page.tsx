@@ -21,7 +21,10 @@ export default function About() {
               <ul className="list-[circle] list-inside ml-7">
                 <li>cheerio</li>
                 <li>highlight.js</li>
-                <li>dayjs</li>
+                <li>--他ページにて--</li>
+                <li>syntaxhighlighter</li>
+                <li>lenis</li>
+                <li>clsx</li>
               </ul>
             </li>
           </ul>
@@ -29,13 +32,17 @@ export default function About() {
         <section className="mt-12">
           <TitleH2>使用予定技術・やることリスト</TitleH2>
           <ul className="list-disc list-inside">
-            <li>メタ</li>
             <li>OGP画像自動生成</li>
             <li>header追従</li>
             <li>カテゴリで絞り込み</li>
             <li>blog増えたとき スクロールで追加読込される</li>
             <li>youtubeでみたモダンアニメーションをgsapで作る</li>
             <li>shadcn/ui</li>
+            <li>アクセシビリティ</li>
+            <li>css設計の復習</li>
+            <li>インターネットの理解</li>
+            <li>reactの深い理解</li>
+            <li>tailwindの理解</li>
             <li>three.js</li>
           </ul>
         </section>

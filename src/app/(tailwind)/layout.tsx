@@ -14,7 +14,7 @@ export default function BlogLayout({
     <html lang="ja">
       <body className={`antialiased`}>
         <main className="">{children}</main>
-        <footer>&copy; 2024 matsutech</footer>
+        <footer className="mt-20 text-center">&copy; 2024 matsutech</footer>
       </body>
     </html>
   );
