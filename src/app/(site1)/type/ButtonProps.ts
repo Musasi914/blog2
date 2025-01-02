@@ -6,5 +6,6 @@ export type ButtonProps = {
   secondaryTitle?: string;
   children: ReactNode;
   href?: string;
+  noHover?: boolean;
   as?: "button" | "a" | "link";
 };

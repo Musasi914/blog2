@@ -24,6 +24,7 @@ export default function BlogLayout({
       <body className={`${zenKaku.variable} antialiased`}>
         <ReactLenis root>
           <Header />
+
           <main className="">{children}</main>
           <footer>&copy; 2024 matsutech</footer>
         </ReactLenis>
