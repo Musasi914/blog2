@@ -53,7 +53,7 @@ export default function BlogLayout({
             </div>
           </header>
           <main className="min-h-[70svh]">{children}</main>
-          <footer className="py-3 text-center mb-10 sm:mb-0">
+          <footer className="py-3 text-center mb-14 sm:mb-0">
             &copy; 2024 matsutech
           </footer>
         </div>

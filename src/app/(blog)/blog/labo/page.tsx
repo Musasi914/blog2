@@ -25,22 +25,26 @@ export default function Labo() {
                 <small>公開日：{work.publish}</small>
               </p>
               <div className="flex gap-4 mt-4">
-                <a
-                  href={work.url}
-                  className="border border-foreground rounded-lg p-2 sm:p-1 sm:px-3 inline-block flex-grow sm:flex-grow-0 text-center hover:opacity-80 sm:text-sm"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  ページはこちら
-                </a>
-                <a
-                  href={work.github}
-                  className="border border-foreground rounded-lg p-2 sm:p-1 sm:px-3 inline-block flex-grow sm:flex-grow-0 text-center hover:opacity-80 sm:text-sm"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  githubはこちら
-                </a>
+                {work.url && (
+                  <a
+                    href={work.url}
+                    className="border border-foreground rounded-lg p-2 sm:p-1 sm:px-3 inline-block flex-grow sm:flex-grow-0 text-center hover:opacity-80 sm:text-sm"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    ページはこちら
+                  </a>
+                )}
+                {work.github && (
+                  <a
+                    href={work.github}
+                    className="border border-foreground rounded-lg p-2 sm:p-1 sm:px-3 inline-block flex-grow sm:flex-grow-0 text-center hover:opacity-80 sm:text-sm"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    githubはこちら
+                  </a>
+                )}
               </div>
             </ListUnderline>
           ))}

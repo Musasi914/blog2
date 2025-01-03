@@ -40,6 +40,14 @@ const LaboArray = [
     github: "https://github.com/Musasi914/pop-the-rock-jackpot",
     learn: ["firebase-匿名認証", "typescript"],
   },
+  {
+    title: "Tailwind CSS 練習場",
+    description:
+      "Tailwind CSSの練習場です。普通にやってて疑問に思った箇所の解決とか、「TailwindCSS実践入門」の感想まとめとかしてます",
+    publish: "2024/12/20くらい",
+    url: "https://blog2-one-phi.vercel.app/tailwind-practice",
+    learn: ["Tailwind CSS", "CSS"],
+  },
 ];
 
 export default LaboArray;
