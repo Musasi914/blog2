@@ -32,6 +32,8 @@ export default function About() {
         <section className="mt-12">
           <TitleH2>使用予定技術・やることリスト</TitleH2>
           <ul className="list-disc list-inside">
+            <li>メタ設定</li>
+            <li>ブログリスト分割ダウンロード</li>
             <li>OGP画像自動生成</li>
             <li>header追従</li>
             <li>カテゴリで絞り込み</li>
