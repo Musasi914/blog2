@@ -132,6 +132,33 @@ const uhyoAge = get(uhyo, "age");
           </SyntaxHighlighter>
         </div>
       </section>
+
+      <section>
+        <h2>8章 非同期処理</h2>
+        <div>
+          <h3>async await の順番をしっかり理解</h3>
+          <SyntaxHighlighter language="typescript" style={dark}>
+            {`
+async function get3(): Promise<number> {
+  console.log("get3が呼び出された");
+  await sleep(1000);
+  console.log("awaitの次に進んだ");
+  return 3;
+}
+
+console.log("get3を呼びだし");
+const p = get3();
+p.then((num) => console.log(num));
+console.log(".thenの後");
+
+// get3を呼びだし;
+// get3が呼び出された.thenの後;
+// awaitの次に進んだ;
+// 3;
+            `}
+          </SyntaxHighlighter>
+        </div>
+      </section>
     </div>
   );
 }

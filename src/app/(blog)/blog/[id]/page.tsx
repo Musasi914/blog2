@@ -46,7 +46,7 @@ export default async function BlogPostPage({
   const formattedUpdatedAt = dayjs(blog.updatedAt).format("YYYY/MM/DD");
   return (
     <Container>
-      <div className="mt-10 border-b border-gray-500 py-5">
+      <div className="mt-10 py-5">
         <h1 className="text-2xl mb-2">{blog.title}</h1>
         {blog.category.length !== 0 && (
           <p className="mr-4 text-sm">

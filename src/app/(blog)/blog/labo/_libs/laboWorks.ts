@@ -43,10 +43,18 @@ const LaboArray = [
   {
     title: "Tailwind CSS 練習場",
     description:
-      "Tailwind CSSの練習場です。普通にやってて疑問に思った箇所の解決とか、「TailwindCSS実践入門」の感想まとめとかしてます",
+      "Tailwind CSSの練習場です。普通にやってて疑問に思った箇所の解決とか、「TailwindCSS実践入門」の感想まとめとか",
     publish: "2024/12/20くらい",
     url: "https://blog2-one-phi.vercel.app/tailwind-practice",
     learn: ["Tailwind CSS", "CSS"],
+  },
+  {
+    title: "TypeScript 練習場",
+    description:
+      "TypeScript練習場。JSの復習にもなったし、よくわからずChatGPTにきいてもあやふやだったのが、ChatGPTにきいたらやっていることはわかる程度には。",
+    publish: "2025/2/10",
+    url: "https://blog2-one-phi.vercel.app/typescript-practice",
+    learn: ["TypeScript"],
   },
 ];
 
