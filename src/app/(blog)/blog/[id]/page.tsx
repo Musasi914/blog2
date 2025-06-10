@@ -8,9 +8,7 @@ import type { Metadata, ResolvingMetadata } from "next";
 type Props = {
   params: Promise<{ id: string }>;
 };
-export async function generateMetadata({
-  params,
-}: Props): // parent: ResolvingMetadata
+export async function generateMetadata({ params }: Props): // parent: ResolvingMetadata
 Promise<Metadata> {
   // ルートパラメータを読み取る
   const id = (await params).id;
@@ -32,11 +30,7 @@ Promise<Metadata> {
   };
 }
 
-export default async function BlogPostPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function BlogPostPage({ params }: { params: Promise<{ id: string }> }) {
   // params.idから
   const { id } = await params;
   // 記事取得を取得
@@ -60,8 +54,7 @@ export default async function BlogPostPage({
         <p>
           <small>
             {formattedPublishedAt}
-            {formattedPublishedAt !== formattedUpdatedAt &&
-              ` -最終更新日： ${formattedUpdatedAt}`}
+            {formattedPublishedAt !== formattedUpdatedAt && ` -最終更新日： ${formattedUpdatedAt}`}
           </small>
         </p>
       </div>

@@ -5,9 +5,12 @@ export const client = createClient({
 });
 
 // 全ブログ取得
-export async function getAllBlogs() {
+export async function getAllBlogs(limit = 100) {
   const data = await client.get({
     endpoint: "blog",
+    queries: {
+      limit,
+    },
   });
   return data.contents;
 }

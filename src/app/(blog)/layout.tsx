@@ -14,8 +14,7 @@ export const metadata: Metadata = {
     default: "Matsu Tech",
     template: `%s | Matsu Tech`,
   },
-  description:
-    "フロントエンドエンジニアに憧れを持つ社会不適合者のブログ。ニートになって勉強する期間が必要ではないかと思っている。",
+  description: "フロントエンドエンジニアに憧れを持つ社会不適合者のブログ。ニートになって勉強する期間が必要ではないかと思っている。",
   alternates: {
     canonical: "https://blog2-one-phi.vercel.app/blog",
   },
@@ -32,30 +31,19 @@ export default function BlogLayout({
         <div className="font-zengothic md:grid grid-rows-[auto_1fr_auto] min-h-screen w-full">
           <header className="py-2 mx-auto fixed sm:relative bottom-0 w-full bg-background border-t sm:border-none border-customgray z-10">
             <div className="grid grid-cols-3 sm:flex justify-center gap-5 mx-auto w-11/12 max-w-screen-xl uppercase">
-              <Link
-                href={"/blog"}
-                className="grid place-items-center p-2 hover:opacity-80"
-              >
+              <Link href={"/blog"} className="grid place-items-center p-2 hover:opacity-80">
                 blog
               </Link>
-              <Link
-                href={"/blog/labo"}
-                className="grid place-items-center p-2 hover:opacity-80"
-              >
+              <Link href={"/blog/labo"} className="grid place-items-center p-2 hover:opacity-80">
                 labo
               </Link>
-              <Link
-                href={"/blog/about"}
-                className="grid place-items-center p-2 hover:opacity-80"
-              >
+              <Link href={"/blog/about"} className="grid place-items-center p-2 hover:opacity-80">
                 about
               </Link>
             </div>
           </header>
           <main className="min-h-[70svh]">{children}</main>
-          <footer className="py-3 text-center mb-14 sm:mb-0">
-            &copy; 2024 matsutech
-          </footer>
+          <footer className="py-3 text-center mb-14 sm:mb-0">&copy; 2025 matsutech</footer>
         </div>
       </body>
     </html>
