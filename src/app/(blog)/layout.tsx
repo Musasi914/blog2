@@ -29,7 +29,7 @@ export default function BlogLayout({
     <html lang="ja" suppressHydrationWarning>
       <body className={`${zenKaku.variable} antialiased`}>
         <div className="font-zengothic grid grid-rows-[1fr_auto] min-h-screen w-full">
-          <header className="py-2 mx-auto fixed bottom-0 sm:bottom-auto sm:top-0 sm:opacity-80 sm:backdrop-blur-md w-full bg-background sm:bg-inherit border-t sm:border-none border-customgray z-10">
+          <header className="py-2 mx-auto fixed bottom-0 sm:bottom-auto sm:top-0 sm:backdrop-blur-xl w-full bg-background sm:bg-inherit border-t sm:border-none border-customgray z-10">
             <div className="grid grid-cols-3 sm:flex justify-center gap-5 mx-auto w-11/12 max-w-screen-xl uppercase">
               <Link href={"/"} className="grid place-items-center p-2 hover:opacity-80">
                 blog

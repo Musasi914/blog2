@@ -28,7 +28,7 @@ export default async function BlogList() {
           <ListUnderline key={data.id}>
             <Link href={`/${data.id}`} className="px-2 py-5 block hover:opacity-80">
               <h2 className="text-xl leading-none">{data.title}</h2>
-              <p className="truncate opacity-70 md:text-sm my-2">{data.content.replace(/<[^>]+>/g, "").slice(0, 100)}</p>
+              <p className="line-clamp-1 whitespace-pre-line opacity-70 text-sm my-2">{data.content.replace(/<[^>]+>/g, "")}</p>
               <div className="flex gap-x-2 flex-wrap-reverse">
                 <p className="leading-none">
                   <small>{dayjs(data.publishedAt).format("YYYY/MM/DD")}</small>
