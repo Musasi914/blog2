@@ -54,7 +54,7 @@ export default async function BlogPostPage({ params }: Props) {
         <p>
           <small>
             {formattedPublishedAt}
-            {formattedPublishedAt !== formattedUpdatedAt && ` -最終更新日： ${formattedUpdatedAt}`}
+            {formattedPublishedAt !== formattedUpdatedAt && ` -最終更新日:${formattedUpdatedAt}`}
           </small>
         </p>
       </div>

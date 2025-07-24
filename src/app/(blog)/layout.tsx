@@ -26,11 +26,11 @@ export default function BlogLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja" suppressHydrationWarning>
+    <html lang="ja">
       <body className={`${zenKaku.variable} antialiased`}>
         <div className="font-zengothic grid grid-rows-[1fr_auto] min-h-screen w-full">
           <header className="py-2 mx-auto fixed bottom-0 sm:bottom-auto sm:top-0 sm:backdrop-blur-xl w-full bg-background sm:bg-inherit border-t sm:border-none border-customgray z-10">
-            <div className="grid grid-cols-3 sm:flex justify-center gap-5 mx-auto w-11/12 max-w-screen-xl uppercase">
+            <nav className="grid grid-cols-3 sm:flex justify-center gap-5 mx-auto w-11/12 max-w-screen-xl uppercase">
               <Link href={"/"} className="grid place-items-center p-2 hover:opacity-80">
                 blog
               </Link>
@@ -40,9 +40,9 @@ export default function BlogLayout({
               <Link href={"/about"} className="grid place-items-center p-2 hover:opacity-80">
                 about
               </Link>
-            </div>
+            </nav>
           </header>
-          <main className="min-h-[70svh]">{children}</main>
+          <main>{children}</main>
           <footer className="py-3 text-center mb-14 sm:mb-0">&copy; 2025 matsutech</footer>
         </div>
       </body>

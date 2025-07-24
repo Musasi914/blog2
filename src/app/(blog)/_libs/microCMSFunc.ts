@@ -12,6 +12,7 @@ export async function getBlogs(limit = 10, offset = 0) {
     queries: {
       limit,
       offset,
+      fields: "id,title,summary,publishedAt,category.id,category.title",
     },
   });
   return data.contents;
