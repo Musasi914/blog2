@@ -1,9 +1,11 @@
+import dynamic from "next/dynamic";
+
 import { getAllContentIds, getPost } from "@/app/(blog)/_libs/microCMSFunc";
 import Container from "@/app/(blog)/_components/layout/Container";
 import dayjs from "dayjs";
 import { BlogCategoryType } from "@/types/BlogType";
-import ConvertHtml from "@/app/(blog)/_components/layout/ConvertHtml";
 import type { Metadata } from "next";
+const ConvertHtml = dynamic(() => import("@/app/(blog)/_components/layout/ConvertHtml"));
 
 type Props = {
   params: Promise<{ id: string }>;
