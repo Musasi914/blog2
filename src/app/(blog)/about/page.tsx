@@ -38,20 +38,20 @@ export default function About() {
         <section>
           <TitleH2>使用予定技術・やることリスト</TitleH2>
           <ul className="list-disc list-inside">
-            <li>メタ設定</li>
+            <li className="line-through">メタ設定</li>
+            <li className="line-through">header追従</li>
+            <li className="line-through">youtubeでみたモダンアニメーションをgsapで作る</li>
+            <li className="line-through">shadcn/ui</li>
+            <li className="line-through">css設計の復習</li>
+            <li className="line-through">インターネットの理解</li>
+            <li className="line-through">tailwindの理解</li>
+            <li className="line-through">three.js</li>
             <li>ブログリスト分割ダウンロード</li>
             <li>OGP画像自動生成</li>
-            <li>header追従</li>
             <li>カテゴリで絞り込み</li>
             <li>blog増えたとき スクロールで追加読込される</li>
-            <li>youtubeでみたモダンアニメーションをgsapで作る</li>
-            <li>shadcn/ui</li>
             <li>アクセシビリティ</li>
-            <li>css設計の復習</li>
-            <li>インターネットの理解</li>
             <li>reactの深い理解</li>
-            <li>tailwindの理解</li>
-            <li>three.js</li>
           </ul>
         </section>
         <section>

@@ -7,7 +7,7 @@ import ListUnderline from "@/app/(blog)/_components/common/List/ListUnderline";
 // import BlogListFallback from "@/app/(blog)/_components/fallback/BlogListFallback";
 
 export default async function BlogList() {
-  const data: BlogType[] = await getBlogs(100, 0);
+  const data: BlogType[] = await getBlogs(10, 0);
   // const SHOW_NUMBER = 20;
   // const [blogs, setBlogs] = useState<BlogType[]>([]);
   // const [offset, setOffset] = useState(0);
@@ -25,7 +25,7 @@ export default async function BlogList() {
       {/* {loading && <BlogListFallback />} */}
       <ul>
         {data.map((data: BlogType) => (
-          <ListUnderline key={data.id}>
+          <li key={data.id} className="border-b border-gray-400">
             <Link href={`/${data.id}`} className="px-2 py-5 block hover:opacity-80">
               <h2 className="text-xl leading-none">{data.title}</h2>
               <p className="line-clamp-1 whitespace-pre-line opacity-70 text-sm my-2">{data.content.replace(/<[^>]+>/g, "")}</p>
@@ -46,7 +46,7 @@ export default async function BlogList() {
                 )}
               </div>
             </Link>
-          </ListUnderline>
+          </li>
         ))}
         {/* <button className="text-center p-20 block w-full" onClick={handleClickButton}>
           more
