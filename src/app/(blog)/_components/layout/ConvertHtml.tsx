@@ -1,4 +1,4 @@
-import styles from "@/app/(blog)/blog/[id]/_style/blogpost.module.css";
+import styles from "@/app/(blog)/[id]/_style/blogpost.module.css";
 import { load } from "cheerio";
 import hljs, { HighlightResult } from "highlight.js";
 import "highlight.js/styles/github-dark.css";
@@ -32,10 +32,5 @@ export default function ConvertHtml({ htmlStr }: { htmlStr: string }) {
     $(elm).addClass("hljs");
   });
   htmlStr = $.html();
-  return (
-    <div
-      className={styles.post}
-      dangerouslySetInnerHTML={{ __html: htmlStr }}
-    />
-  );
+  return <div className={styles.post} dangerouslySetInnerHTML={{ __html: htmlStr }} />;
 }

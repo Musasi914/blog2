@@ -5,11 +5,12 @@ export const client = createClient({
 });
 
 // 全ブログ取得
-export async function getAllBlogs(limit = 100) {
+export async function getAllBlogs(limit = 20, offset = 0) {
   const data = await client.get({
     endpoint: "blog",
     queries: {
       limit,
+      offset,
     },
   });
   return data.contents;
@@ -25,12 +26,9 @@ export async function getPost(id: string) {
 }
 
 // 静的生成用　idの配列取得
-export async function getAllIds() {
-  const data = await client.get({
+export async function getAllContentIds() {
+  const data = await client.getAllContentIds({
     endpoint: "blog",
-    queries: {
-      fields: "id",
-    },
   });
-  return data.contents;
+  return data;
 }
