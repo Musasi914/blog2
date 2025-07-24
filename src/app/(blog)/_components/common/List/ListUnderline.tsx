@@ -3,10 +3,13 @@ import { ReactNode } from "react";
 type ListProps = {
   className?: string;
   children: ReactNode;
+  key?: string;
 };
 
-export default function ListUnderline({ className, children }: ListProps) {
+export default function ListUnderline({ className, children, key }: ListProps) {
   return (
-    <li className={`border-b border-gray-400 ${className}`}>{children}</li>
+    <li key={key} className={`border-b border-gray-400 ${className}`}>
+      {children}
+    </li>
   );
 }

@@ -26,7 +26,7 @@ export default function BlogLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja">
+    <html lang="ja" suppressHydrationWarning>
       <body className={`${zenKaku.variable} antialiased`}>
         <div className="font-zengothic grid grid-rows-[1fr_auto] min-h-screen w-full">
           <header className="py-2 mx-auto fixed bottom-0 sm:bottom-auto sm:top-0 sm:opacity-80 sm:backdrop-blur-md w-full bg-background sm:bg-inherit border-t sm:border-none border-customgray z-10">

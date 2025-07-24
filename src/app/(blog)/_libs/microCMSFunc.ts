@@ -5,7 +5,8 @@ export const client = createClient({
 });
 
 // 全ブログ取得
-export async function getAllBlogs(limit = 20, offset = 0) {
+export async function getBlogs(limit = 20, offset = 0) {
+  // await new Promise((resolve) => setTimeout(resolve, 2000));
   const data = await client.get({
     endpoint: "blog",
     queries: {
