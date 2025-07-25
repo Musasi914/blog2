@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { getBlogsFromCategory } from "@/app/(blog)/_libs/microCMSFunc";
 import Intro from "@/app/(blog)/_components/layout/Intro";
 import Container from "@/app/(blog)/_components/layout/Container";
 import BlogList from "@/app/(blog)/_components/layout/BlogList";
@@ -8,13 +7,11 @@ import { Suspense } from "react";
 import BlogListFallback from "../../_components/fallback/BlogListFallback";
 
 type CategoryProps = {
-  params: { slug: Promise<"learn" | "important" | "release" | "memory"> };
+  params: Promise<{ slug: "learn" | "important" | "release" | "memory" }>;
 };
 
-const LIMIT = 10;
-
 export async function generateMetadata({ params }: CategoryProps): Promise<Metadata> {
-  const title = await params.slug;
+  const title = (await params).slug;
   return {
     title: title,
     description: `カテゴリー：${title}の一覧`,
@@ -27,7 +24,7 @@ export async function generateMetadata({ params }: CategoryProps): Promise<Metad
 }
 
 export default async function Category({ params }: CategoryProps) {
-  const category = await params.slug;
+  const category = (await params).slug;
   let categoryJapanese: string = "カテゴリ";
   switch (category) {
     case "memory":
