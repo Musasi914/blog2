@@ -14,7 +14,13 @@ type Props = {
 };
 
 export default function BlogListClient({ initialBlogs, category }: Props) {
-  const [blogs, setBlogs] = useState<BlogType[]>(initialBlogs);
+  const [blogs, setBlogs] = useState<BlogType[]>(() => {
+    if (typeof window !== "undefined") {
+      const saveList = sessionStorage.getItem(STORAGE_KEY_BLOGS);
+      return saveList ? JSON.parse(saveList) : initialBlogs;
+    }
+    return initialBlogs;
+  });
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
@@ -27,11 +33,12 @@ export default function BlogListClient({ initialBlogs, category }: Props) {
   //   if (saveList) setBlogs(JSON.parse(saveList));
   // }, []);
 
-  // // blogsが変わるたびに保存
-  // useEffect(() => {
-  //   const uniqueBlogs = Array.from(new Map(blogs.map((blog) => [blog.id, blog])).values());
-  //   sessionStorage.setItem(STORAGE_KEY_BLOGS, JSON.stringify(uniqueBlogs));
-  // }, [blogs]);
+  // blogsが変わるたびに保存
+  useEffect(() => {
+    const uniqueBlogs = Array.from(new Map(blogs.map((blog) => [blog.id, blog])).values());
+    uniqueBlogs.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+    sessionStorage.setItem(STORAGE_KEY_BLOGS, JSON.stringify(uniqueBlogs));
+  }, [blogs]);
 
   /**
    * 無限スクロール
@@ -40,9 +47,10 @@ export default function BlogListClient({ initialBlogs, category }: Props) {
     if (loading || !hasMore) return;
     setLoading(true);
     const nextOffset = blogs.length;
-    const res = await fetch(`/api/blog?offset=${nextOffset}&limit=${LIMIT}`);
+    const res = category
+      ? await fetch(`/api/blog?offset=${nextOffset}&limit=${LIMIT}&category=${category}`)
+      : await fetch(`/api/blog?offset=${nextOffset}&limit=${LIMIT}`);
     if (!res.ok) {
-      console.log("response false");
       setLoading(false);
       return;
     }
@@ -75,6 +83,7 @@ export default function BlogListClient({ initialBlogs, category }: Props) {
       }
     };
   }, [hasMore, observerRef, loadMore]);
+
   return (
     <>
       <ul>

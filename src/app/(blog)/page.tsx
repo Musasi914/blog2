@@ -7,7 +7,7 @@ import BlogListFallback from "./_components/fallback/BlogListFallback";
 export default function Home() {
   return (
     <div>
-      <Intro title="BLOG">何かしらアウトプット用。</Intro>
+      <Intro title="BLOG">何かしらアウトプット用</Intro>
       <CategorySelector />
       <Container>
         <Suspense fallback={<BlogListFallback />}>

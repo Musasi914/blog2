@@ -10,7 +10,7 @@ export default function BlogItem({ blogData }: { blogData: BlogType }) {
     <ListUnderline className="border-b border-gray-400">
       <Link href={`/${blogData.id}`} className="px-2 py-5 block hover:opacity-80">
         <h2 className="text-xl leading-none">{blogData.title}</h2>
-        <p className="line-clamp-1 whitespace-pre-line opacity-70 text-sm my-2">{blogData.summary}</p>
+        <p className="line-clamp-1 whitespace-pre-line opacity-70 text-sm my-2">{blogData.summary ?? ""}</p>
         <div className="flex gap-x-2 flex-wrap-reverse">
           <p className="leading-none">
             <small>{dayjs(blogData.publishedAt).format("YYYY/MM/DD")}</small>

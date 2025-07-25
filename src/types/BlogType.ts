@@ -7,7 +7,7 @@ export type BlogType = {
   id: string;
   publishedAt: string;
   title: string;
-  summary: string;
+  summary?: string;
   category: BlogCategoryType[];
 };
 
