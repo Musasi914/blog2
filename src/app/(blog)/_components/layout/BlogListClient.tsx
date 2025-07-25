@@ -11,10 +11,9 @@ const STORAGE_KEY_BLOGS = "blogList";
 type Props = {
   initialBlogs: BlogType[];
   category?: CategoryType;
-  fetchBlogs: (limit: number, offset: number, category?: CategoryType) => Promise<BlogType[]>;
 };
 
-export default function BlogListClient({ initialBlogs, category, fetchBlogs }: Props) {
+export default function BlogListClient({ initialBlogs, category }: Props) {
   const [blogs, setBlogs] = useState<BlogType[]>(initialBlogs);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -41,7 +40,14 @@ export default function BlogListClient({ initialBlogs, category, fetchBlogs }: P
     if (loading || !hasMore) return;
     setLoading(true);
     const nextOffset = blogs.length;
-    const newBlogs = await fetchBlogs(LIMIT, nextOffset, category);
+    const res = await fetch(`/api/blog?offset=${nextOffset}&limit=${LIMIT}`);
+    if (!res.ok) {
+      console.log("response false");
+      setLoading(false);
+      return;
+    }
+    const newBlogs: BlogType[] = await res.json();
+
     if (newBlogs.length < LIMIT) setHasMore(false);
     setBlogs((prev) => {
       const allBlogs = [...prev, ...newBlogs];
@@ -50,7 +56,7 @@ export default function BlogListClient({ initialBlogs, category, fetchBlogs }: P
       return uniqueBlogs;
     });
     setLoading(false);
-  }, [fetchBlogs, loading, hasMore, blogs]);
+  }, [loading, hasMore, blogs]);
 
   // observer
   useEffect(() => {
