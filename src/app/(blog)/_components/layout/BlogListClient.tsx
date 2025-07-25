@@ -28,10 +28,10 @@ export default function BlogListClient({ initialBlogs, category }: Props) {
   /**
    * セッションストレージ
    */
-  // useEffect(() => {
-  //   const saveList = sessionStorage.getItem(STORAGE_KEY_BLOGS);
-  //   if (saveList) setBlogs(JSON.parse(saveList));
-  // }, []);
+  useEffect(() => {
+    // カテゴリが変わったら初期化
+    setBlogs(initialBlogs);
+  }, [category]);
 
   // blogsが変わるたびに保存
   useEffect(() => {
