@@ -13,7 +13,6 @@ const categoryList = [
 
 export default function CategorySelector({ visiting }: { visiting?: CategoryType }) {
   const router = useRouter();
-
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     if (value === "all") router.push("/");
@@ -25,12 +24,14 @@ export default function CategorySelector({ visiting }: { visiting?: CategoryType
       <select
         name="select category"
         className="border text-sm rounded-lg block w-full p-2.5 mb-4 bg-background border-gray-600 placeholder-gray-400  focus:ring-blue-500 focus:border-blue-500"
-        defaultValue={visiting}
+        defaultValue={visiting ?? "all"}
         onChange={handleChange}
       >
         <option value="all">All</option>
         {categoryList.map((categoryData) => (
-          <option value={categoryData.value}>{categoryData.name}</option>
+          <option key={categoryData.value} value={categoryData.value}>
+            {categoryData.name}
+          </option>
         ))}
       </select>
     </Container>

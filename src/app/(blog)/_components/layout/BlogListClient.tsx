@@ -6,6 +6,8 @@ import BlogItem from "../common/List/BlogItem";
 import Spinner from "../common/Spinner/Spinner";
 
 const LIMIT = 10;
+const STORAGE_KEY_BLOGS = "blogList";
+// const STORAGE_KEY_SCROLL = "blogListScroll";
 
 type Props = {
   initialBlogs: BlogType[];
@@ -13,11 +15,38 @@ type Props = {
 };
 
 export default function BlogListClient({ initialBlogs, category }: Props) {
-  const [blogs, setBlogs] = useState<BlogType[]>(initialBlogs);
+  const [blogs, setBlogs] = useState<BlogType[]>(() => {
+    const saveList = sessionStorage.getItem(STORAGE_KEY_BLOGS);
+    return saveList ? JSON.parse(saveList) : initialBlogs;
+  });
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
 
+  console.log("ルートです　レンダリング");
+
+  /**
+   * セッションストレージ
+   */
+  // blogsが変わるたびに保存
+  useEffect(() => {
+    const uniqueBlogs = Array.from(new Map(blogs.map((blog) => [blog.id, blog])).values());
+    sessionStorage.setItem(STORAGE_KEY_BLOGS, JSON.stringify(uniqueBlogs));
+  }, [blogs]);
+
+  //　ページ離脱時にスクロール位置保存
+  // useEffect(() => {
+  //   const saveScroll = () => {
+  //     sessionStorage.setItem(STORAGE_KEY_SCROLL, String(window.scrollY));
+  //   };
+  //   window.addEventListener("beforeunload", saveScroll);
+  //   return () => window.removeEventListener("beforeunload", saveScroll);
+  // }, []);
+
+  /**
+   * 無限スクロール
+   */
+  // 記事読み込み
   const loadMore = useCallback(async () => {
     if (loading || !hasMore) return;
     setLoading(true);
@@ -30,6 +59,7 @@ export default function BlogListClient({ initialBlogs, category }: Props) {
     setLoading(false);
   }, [blogs, loading, hasMore]);
 
+  // observer
   useEffect(() => {
     if (!hasMore) return;
     const observer = new window.IntersectionObserver(
