@@ -1,6 +1,5 @@
 import { getBlogs } from "@/app/(blog)/_libs/microCMSFunc";
 import { BlogType } from "@/types/BlogType";
-import BlogListFallback from "@/app/(blog)/_components/fallback/BlogListFallback";
 import BlogListClient from "./BlogListClient";
 
 const LIMIT = 10;
