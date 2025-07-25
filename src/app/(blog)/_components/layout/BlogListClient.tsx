@@ -1,7 +1,6 @@
 "use client";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { BlogType, CategoryType } from "@/types/BlogType";
-import { getBlogsPaginated, getBlogsPaginatedFromCategory } from "@/app/(blog)/_serverActions/getBlogsPaginated";
 import BlogItem from "../common/List/BlogItem";
 import Spinner from "../common/Spinner/Spinner";
 
@@ -12,66 +11,54 @@ const STORAGE_KEY_BLOGS = "blogList";
 type Props = {
   initialBlogs: BlogType[];
   category?: CategoryType;
+  fetchBlogs: (limit: number, offset: number, category?: CategoryType) => Promise<BlogType[]>;
 };
 
-export default function BlogListClient({ initialBlogs, category }: Props) {
+export default function BlogListClient({ initialBlogs, category, fetchBlogs }: Props) {
   const [blogs, setBlogs] = useState<BlogType[]>(initialBlogs);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  console.log("ルートです　レンダリング");
-
   /**
    * セッションストレージ
    */
-  useEffect(() => {
-    const saveList = sessionStorage.getItem(STORAGE_KEY_BLOGS);
-    if (saveList) setBlogs(JSON.parse(saveList));
-  }, []);
-
-  // blogsが変わるたびに保存
-  useEffect(() => {
-    const uniqueBlogs = Array.from(new Map(blogs.map((blog) => [blog.id, blog])).values());
-    sessionStorage.setItem(STORAGE_KEY_BLOGS, JSON.stringify(uniqueBlogs));
-  }, [blogs]);
-
-  //　ページ離脱時にスクロール位置保存
   // useEffect(() => {
-  //   const saveScroll = () => {
-  //     sessionStorage.setItem(STORAGE_KEY_SCROLL, String(window.scrollY));
-  //   };
-  //   window.addEventListener("beforeunload", saveScroll);
-  //   return () => window.removeEventListener("beforeunload", saveScroll);
+  //   const saveList = sessionStorage.getItem(STORAGE_KEY_BLOGS);
+  //   if (saveList) setBlogs(JSON.parse(saveList));
   // }, []);
+
+  // // blogsが変わるたびに保存
+  // useEffect(() => {
+  //   const uniqueBlogs = Array.from(new Map(blogs.map((blog) => [blog.id, blog])).values());
+  //   sessionStorage.setItem(STORAGE_KEY_BLOGS, JSON.stringify(uniqueBlogs));
+  // }, [blogs]);
 
   /**
    * 無限スクロール
    */
-  // 記事読み込み
   const loadMore = useCallback(async () => {
     if (loading || !hasMore) return;
     setLoading(true);
     const nextOffset = blogs.length;
-    const newBlogs = category
-      ? await getBlogsPaginatedFromCategory(category, LIMIT, nextOffset)
-      : await getBlogsPaginated(LIMIT, nextOffset);
+    const newBlogs = await fetchBlogs(LIMIT, nextOffset, category);
     if (newBlogs.length < LIMIT) setHasMore(false);
-    setBlogs((prev) => [...prev, ...newBlogs]);
+    setBlogs((prev) => {
+      const allBlogs = [...prev, ...newBlogs];
+      const uniqueBlogs = Array.from(new Map(allBlogs.map((blog) => [blog.id, blog])).values());
+      return uniqueBlogs;
+    });
     setLoading(false);
-  }, [blogs, loading, hasMore]);
+  }, [fetchBlogs, loading, hasMore, blogs]);
 
   // observer
   useEffect(() => {
     if (!hasMore) return;
-    const observer = new window.IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadMore();
-        }
-      },
-      { threshold: 1.0 }
-    );
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        loadMore();
+      }
+    });
     if (observerRef.current) {
       observer.observe(observerRef.current);
     }
@@ -80,7 +67,7 @@ export default function BlogListClient({ initialBlogs, category }: Props) {
         observer.unobserve(observerRef.current);
       }
     };
-  }, [loadMore, hasMore]);
+  }, [hasMore, observerRef, loadMore]);
 
   return (
     <>
@@ -89,7 +76,7 @@ export default function BlogListClient({ initialBlogs, category }: Props) {
           <BlogItem key={blog.id} blogData={blog} />
         ))}
       </ul>
-      {hasMore && <div ref={observerRef} style={{ height: 1 }} />}
+      {hasMore && <div ref={observerRef} className="h-px" />}
       {loading && <Spinner />}
     </>
   );
