@@ -10,3 +10,5 @@ export type BlogType = {
   summary: string;
   category: BlogCategoryType[];
 };
+
+export type CategoryType = "memory" | "release" | "important" | "learn";

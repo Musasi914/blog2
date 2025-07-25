@@ -1,16 +1,17 @@
 "use client";
 import { useState, useRef, useEffect, useCallback } from "react";
-import { BlogType } from "@/types/BlogType";
-import { getBlogsPaginated } from "@/app/(blog)/_serverActions/getBlogsPaginated";
+import { BlogType, CategoryType } from "@/types/BlogType";
+import { getBlogsPaginated, getBlogsPaginatedFromCategory } from "@/app/(blog)/_serverActions/getBlogsPaginated";
 import BlogItem from "../common/List/BlogItem";
 
 const LIMIT = 10;
 
 type Props = {
   initialBlogs: BlogType[];
+  category?: CategoryType;
 };
 
-export default function BlogListClient({ initialBlogs }: Props) {
+export default function BlogListClient({ initialBlogs, category }: Props) {
   const [blogs, setBlogs] = useState<BlogType[]>(initialBlogs);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -20,7 +21,9 @@ export default function BlogListClient({ initialBlogs }: Props) {
     if (loading || !hasMore) return;
     setLoading(true);
     const nextOffset = blogs.length;
-    const newBlogs = await getBlogsPaginated(LIMIT, nextOffset);
+    const newBlogs = category
+      ? await getBlogsPaginatedFromCategory(category, LIMIT, nextOffset)
+      : await getBlogsPaginated(LIMIT, nextOffset);
     if (newBlogs.length < LIMIT) setHasMore(false);
     setBlogs((prev) => [...prev, ...newBlogs]);
     setLoading(false);

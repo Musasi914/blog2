@@ -1,3 +1,4 @@
+import { CategoryType } from "@/types/BlogType";
 import { createClient } from "microcms-js-sdk";
 export const client = createClient({
   serviceDomain: process.env.SERVICE_DOMAIN || "",
@@ -33,4 +34,38 @@ export async function getAllContentIds() {
     endpoint: "blog",
   });
   return data;
+}
+
+// カテゴリ別ブログ取得
+export async function getBlogsFromCategory(category: CategoryType, limit = 10, offset = 0) {
+  let categoryVariants;
+  switch (category) {
+    case "memory":
+      categoryVariants = "sq6jyab_dcj";
+      break;
+
+    case "release":
+      categoryVariants = "5plhbfsr2";
+      break;
+
+    case "learn":
+      categoryVariants = "6x-voqyv7x_k";
+      break;
+
+    case "important":
+      categoryVariants = "djjof-818q";
+      break;
+
+    default:
+      break;
+  }
+  const data = await client.get({
+    endpoint: "blog",
+    queries: {
+      limit,
+      offset,
+      filters: `category[contains]${categoryVariants}`,
+    },
+  });
+  return data.contents;
 }
