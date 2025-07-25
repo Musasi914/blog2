@@ -15,10 +15,7 @@ type Props = {
 };
 
 export default function BlogListClient({ initialBlogs, category }: Props) {
-  const [blogs, setBlogs] = useState<BlogType[]>(() => {
-    const saveList = sessionStorage.getItem(STORAGE_KEY_BLOGS);
-    return saveList ? JSON.parse(saveList) : initialBlogs;
-  });
+  const [blogs, setBlogs] = useState<BlogType[]>(initialBlogs);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
@@ -28,6 +25,11 @@ export default function BlogListClient({ initialBlogs, category }: Props) {
   /**
    * セッションストレージ
    */
+  useEffect(() => {
+    const saveList = sessionStorage.getItem(STORAGE_KEY_BLOGS);
+    if (saveList) setBlogs(JSON.parse(saveList));
+  }, []);
+
   // blogsが変わるたびに保存
   useEffect(() => {
     const uniqueBlogs = Array.from(new Map(blogs.map((blog) => [blog.id, blog])).values());
