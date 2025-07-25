@@ -46,6 +46,7 @@ export default function BlogListClient({ initialBlogs, category, fetchBlogs }: P
     setBlogs((prev) => {
       const allBlogs = [...prev, ...newBlogs];
       const uniqueBlogs = Array.from(new Map(allBlogs.map((blog) => [blog.id, blog])).values());
+      uniqueBlogs.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
       return uniqueBlogs;
     });
     setLoading(false);
@@ -68,7 +69,6 @@ export default function BlogListClient({ initialBlogs, category, fetchBlogs }: P
       }
     };
   }, [hasMore, observerRef, loadMore]);
-
   return (
     <>
       <ul>

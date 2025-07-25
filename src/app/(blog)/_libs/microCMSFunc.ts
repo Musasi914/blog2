@@ -14,6 +14,7 @@ export async function getBlogs(limit = 10, offset = 0) {
       limit,
       offset,
       fields: "id,title,summary,publishedAt,category.id,category.title",
+      orders: "-publishedAt",
     },
   });
   return data.contents;
@@ -64,7 +65,9 @@ export async function getBlogsFromCategory(category: CategoryType, limit = 10, o
     queries: {
       limit,
       offset,
+      fields: "id,title,summary,publishedAt,category.id,category.title",
       filters: `category[contains]${categoryVariants}`,
+      orders: "-publishedAt",
     },
   });
   return data.contents;
