@@ -41,17 +41,37 @@ export default async function BlogPostPage({ params }: Props) {
   // dayjsを使ってpublishedAtをYY.MM.DD形式に
   const formattedPublishedAt = dayjs(blog.publishedAt).format("YYYY/MM/DD");
   const formattedUpdatedAt = dayjs(blog.updatedAt).format("YYYY/MM/DD");
+
   return (
     <Container>
       <div className="pt-10 sm:pt-20 py-5">
         <h1 className="text-2xl mb-2">{blog.title}</h1>
         {blog.category.length !== 0 && (
           <p className="mr-4 text-sm">
-            {blog.category.map((cat: BlogCategoryType) => (
-              <Link href={`/category/${cat.id}`} key={cat.id} className="mr-2 bg-customgray px-2 rounded-sm">
-                {cat.title}
-              </Link>
-            ))}
+            {blog.category.map((cat: BlogCategoryType) => {
+              let category;
+              switch (cat.title) {
+                case "日記":
+                  category = "memory";
+                  break;
+                case "重要":
+                  category = "important";
+                  break;
+                case "リリース":
+                  category = "リリースrelease";
+                  break;
+                case "覚えておきたい":
+                  category = "learn";
+                  break;
+                default:
+                  break;
+              }
+              return (
+                <Link href={`/category/${category}`} key={cat.id} className="mr-2 bg-customgray px-2 rounded-sm">
+                  {cat.title}
+                </Link>
+              );
+            })}
           </p>
         )}
         <p>
