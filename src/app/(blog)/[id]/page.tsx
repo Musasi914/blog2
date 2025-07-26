@@ -5,6 +5,7 @@ import Container from "@/app/(blog)/_components/layout/Container";
 import dayjs from "dayjs";
 import { BlogCategoryType } from "@/types/BlogType";
 import type { Metadata } from "next";
+import Link from "next/link";
 const ConvertHtml = dynamic(() => import("@/app/(blog)/_components/layout/ConvertHtml"));
 
 type Props = {
@@ -47,9 +48,9 @@ export default async function BlogPostPage({ params }: Props) {
         {blog.category.length !== 0 && (
           <p className="mr-4 text-sm">
             {blog.category.map((cat: BlogCategoryType) => (
-              <span key={cat.id} className="mr-2 bg-customgray px-2 rounded-sm">
+              <Link href={`/category/${cat.id}`} key={cat.id} className="mr-2 bg-customgray px-2 rounded-sm">
                 {cat.title}
-              </span>
+              </Link>
             ))}
           </p>
         )}

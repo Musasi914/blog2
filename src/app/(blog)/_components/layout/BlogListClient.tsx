@@ -6,7 +6,6 @@ import Spinner from "../common/Spinner/Spinner";
 
 const LIMIT = 10;
 const STORAGE_KEY_BLOGS = "blogList";
-// const STORAGE_KEY_SCROLL = "blogListScroll";
 
 type Props = {
   initialBlogs: BlogType[];

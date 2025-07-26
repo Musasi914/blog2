@@ -1,5 +1,5 @@
 import { getBlogs, getBlogsFromCategory } from "@/app/(blog)/_libs/microCMSFunc";
-import { BlogType, CategoryType } from "@/types/BlogType";
+import { CategoryType } from "@/types/BlogType";
 import BlogListClient from "./BlogListClient";
 
 const LIMIT = 10;
@@ -11,6 +11,5 @@ async function fetchBlogs(limit: number, offset: number, category?: CategoryType
 
 export default async function BlogList({ category }: { category?: CategoryType }) {
   const initialBlogs = await fetchBlogs(LIMIT, 0, category);
-  console.log(initialBlogs);
   return <BlogListClient initialBlogs={initialBlogs} category={category} />;
 }
