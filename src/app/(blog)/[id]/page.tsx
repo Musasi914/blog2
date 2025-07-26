@@ -58,7 +58,7 @@ export default async function BlogPostPage({ params }: Props) {
                   category = "important";
                   break;
                 case "リリース":
-                  category = "リリースrelease";
+                  category = "release";
                   break;
                 case "覚えておきたい":
                   category = "learn";
