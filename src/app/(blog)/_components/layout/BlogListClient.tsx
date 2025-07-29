@@ -8,17 +8,19 @@ const LIMIT = 10;
 const STORAGE_KEY_BLOGS = "blogList";
 
 type Props = {
-  initialBlogs: BlogType[];
   category?: CategoryType;
+  fetchBlogs: (limit: number, offset: number, category?: CategoryType) => Promise<BlogType[]>;
 };
 
-export default function BlogListClient({ initialBlogs, category }: Props) {
+export default function BlogListClient({ category, fetchBlogs }: Props) {
   const [blogs, setBlogs] = useState<BlogType[]>(() => {
-    if (typeof window !== "undefined") {
-      const saveList = sessionStorage.getItem(STORAGE_KEY_BLOGS);
-      return saveList ? JSON.parse(saveList) : initialBlogs;
+    let savedBlogs: string | null = null;
+    if (category) {
+      savedBlogs = sessionStorage.getItem(category);
+    } else {
+      savedBlogs = sessionStorage.getItem(STORAGE_KEY_BLOGS);
     }
-    return initialBlogs;
+    return savedBlogs ? JSON.parse(savedBlogs) : [];
   });
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -27,16 +29,14 @@ export default function BlogListClient({ initialBlogs, category }: Props) {
   /**
    * セッションストレージ
    */
-  useEffect(() => {
-    // カテゴリが変わったら初期化
-    setBlogs(initialBlogs);
-  }, [category]);
-
   // blogsが変わるたびに保存
   useEffect(() => {
     const uniqueBlogs = Array.from(new Map(blogs.map((blog) => [blog.id, blog])).values());
-    uniqueBlogs.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-    sessionStorage.setItem(STORAGE_KEY_BLOGS, JSON.stringify(uniqueBlogs));
+    if (category) {
+      sessionStorage.setItem(category, JSON.stringify(uniqueBlogs));
+    } else {
+      sessionStorage.setItem(STORAGE_KEY_BLOGS, JSON.stringify(uniqueBlogs));
+    }
   }, [blogs]);
 
   /**
@@ -46,24 +46,16 @@ export default function BlogListClient({ initialBlogs, category }: Props) {
     if (loading || !hasMore) return;
     setLoading(true);
     const nextOffset = blogs.length;
-    const res = category
-      ? await fetch(`/api/blog?offset=${nextOffset}&limit=${LIMIT}&category=${category}`)
-      : await fetch(`/api/blog?offset=${nextOffset}&limit=${LIMIT}`);
-    if (!res.ok) {
-      setLoading(false);
-      return;
-    }
-    const newBlogs: BlogType[] = await res.json();
+    const newBlogs = await fetchBlogs(LIMIT, nextOffset, category);
 
     if (newBlogs.length < LIMIT) setHasMore(false);
     setBlogs((prev) => {
       const allBlogs = [...prev, ...newBlogs];
       const uniqueBlogs = Array.from(new Map(allBlogs.map((blog) => [blog.id, blog])).values());
-      uniqueBlogs.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
       return uniqueBlogs;
     });
     setLoading(false);
-  }, [loading, hasMore, blogs]);
+  }, [loading, hasMore, blogs, category, fetchBlogs]);
 
   // observer
   useEffect(() => {

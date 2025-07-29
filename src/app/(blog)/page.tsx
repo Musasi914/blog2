@@ -10,9 +10,7 @@ export default function Home() {
       <Intro title="BLOG">何かしらアウトプット用</Intro>
       <CategorySelector />
       <Container>
-        <Suspense fallback={<BlogListFallback />}>
-          <BlogList />
-        </Suspense>
+        <BlogList />
       </Container>
     </div>
   );
