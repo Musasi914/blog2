@@ -11,12 +11,12 @@ const zenKaku = Zen_Kaku_Gothic_New({
 
 export const metadata: Metadata = {
   title: {
-    default: "Matsu Tech",
-    template: `%s | Matsu Tech`,
+    default: "Kinecoの日記帳",
+    template: `%s | Kinecoの日記帳`,
   },
-  description: "フロントエンドエンジニアに憧れを持つ社会不適合者のブログ。ニートになって勉強する期間が必要ではないかと思っている。",
+  description: "Kinecoの自分振り帰り用途のサイトです。",
   alternates: {
-    canonical: "https://blog2-one-phi.vercel.app/blog",
+    canonical: "https://blog2-one-phi.vercel.app/",
   },
 };
 
