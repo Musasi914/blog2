@@ -5,7 +5,6 @@ import BlogItem from "../common/List/BlogItem";
 import Spinner from "../common/Spinner/Spinner";
 
 const LIMIT = 10;
-const STORAGE_KEY_BLOGS = "blogList";
 
 type Props = {
   category?: CategoryType;
@@ -29,7 +28,7 @@ export default function BlogListClient({ category, fetchBlogs }: Props) {
     if (category) {
       savedBlogs = sessionStorage.getItem(category);
     } else {
-      savedBlogs = sessionStorage.getItem(STORAGE_KEY_BLOGS);
+      savedBlogs = sessionStorage.getItem("blogList");
     }
     if (savedBlogs) {
       setBlogs(JSON.parse(savedBlogs));
@@ -48,7 +47,7 @@ export default function BlogListClient({ category, fetchBlogs }: Props) {
       if (category) {
         sessionStorage.setItem(category, JSON.stringify(uniqueBlogs));
       } else {
-        sessionStorage.setItem(STORAGE_KEY_BLOGS, JSON.stringify(uniqueBlogs));
+        sessionStorage.setItem("blogList", JSON.stringify(uniqueBlogs));
       }
     }
   }, [blogs, category]);

@@ -1,6 +1,7 @@
 import { getBlogs, getBlogsFromCategory } from "@/app/(blog)/_libs/microCMSFunc";
 import { CategoryType } from "@/types/BlogType";
 import BlogListClient from "./BlogListClient";
+import CategorySelector from "@/app/(blog)/_components/common/Select/CategorySelector";
 
 const LIMIT = 10;
 
@@ -11,5 +12,10 @@ async function fetchBlogs(limit: number, offset: number, category?: CategoryType
 }
 
 export default function BlogList({ category }: { category?: CategoryType }) {
-  return <BlogListClient category={category} fetchBlogs={fetchBlogs} />;
+  return (
+    <>
+      <CategorySelector visiting={category} />
+      <BlogListClient category={category} fetchBlogs={fetchBlogs} />
+    </>
+  );
 }

@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { CategoryType } from "@/types/BlogType";
-import Container from "../../layout/Container";
+import { useCallback } from "react";
 
 const categoryList = [
   { name: "日記", value: "memory" },
@@ -19,11 +19,17 @@ export default function CategorySelector({ visiting }: { visiting?: CategoryType
     else router.push(`/category/${value}`);
   };
 
+  const getLatestBlogs = useCallback(async () => {
+    sessionStorage.removeItem(visiting ? `${visiting}-scrollPosition` : "scrollPosition");
+    sessionStorage.removeItem(visiting ? visiting : "blogList");
+    window.location.reload();
+  }, [visiting]);
+
   return (
-    <Container>
+    <div className="flex gap-4 align-center">
       <select
         name="select category"
-        className="border text-sm rounded-lg block w-full p-2.5 mb-4 bg-background border-gray-600 placeholder-gray-400  focus:ring-blue-500 focus:border-blue-500"
+        className="flex-1 border text-sm rounded-lg block  p-2.5 bg-background border-gray-600 placeholder-gray-400  focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
         defaultValue={visiting ?? "all"}
         onChange={handleChange}
       >
@@ -34,6 +40,11 @@ export default function CategorySelector({ visiting }: { visiting?: CategoryType
           </option>
         ))}
       </select>
-    </Container>
+      <div className="z-10">
+        <button className="bg-black block w-full h-full text-foreground px-4 py-2 rounded-md " onClick={getLatestBlogs}>
+          最新記事の取得
+        </button>
+      </div>
+    </div>
   );
 }
