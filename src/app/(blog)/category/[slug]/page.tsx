@@ -11,7 +11,9 @@ type CategoryProps = {
   params: Promise<{ slug: "learn" | "important" | "release" | "memory" }>;
 };
 
-export async function generateMetadata({ params }: CategoryProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: CategoryProps): Promise<Metadata> {
   const title = (await params).slug;
   return {
     title: title,
@@ -26,7 +28,12 @@ export async function generateMetadata({ params }: CategoryProps): Promise<Metad
 
 export default async function Category({ params }: CategoryProps) {
   const category = (await params).slug;
-  if (category !== "important" && category !== "memory" && category !== "release" && category !== "learn") {
+  if (
+    category !== "important" &&
+    category !== "memory" &&
+    category !== "release" &&
+    category !== "learn"
+  ) {
     notFound();
   }
   let categoryJapanese: string = "カテゴリ";
@@ -49,7 +56,6 @@ export default async function Category({ params }: CategoryProps) {
   return (
     <div>
       <Intro title="BLOG">カテゴリ：{categoryJapanese}</Intro>
-      <CategorySelector visiting={category} />
       <Container>
         <Suspense fallback={<BlogListFallback />}>
           <BlogList category={category} />
