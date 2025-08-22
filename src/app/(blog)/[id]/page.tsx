@@ -6,12 +6,16 @@ import dayjs from "dayjs";
 import { BlogCategoryType } from "@/types/BlogType";
 import type { Metadata } from "next";
 import Link from "next/link";
-const ConvertHtml = dynamic(() => import("@/app/(blog)/_components/layout/ConvertHtml"));
+const ConvertHtml = dynamic(
+  () => import("@/app/(blog)/_components/layout/ConvertHtml")
+);
 
 type Props = {
   params: Promise<{ id: string }>;
 };
-export async function generateMetadata({ params }: Props): // parent: ResolvingMetadata
+export async function generateMetadata({
+  params,
+}: Props): // parent: ResolvingMetadata
 Promise<Metadata> {
   // ルートパラメータを読み取る
   const id = (await params).id;
@@ -24,10 +28,10 @@ Promise<Metadata> {
 
   return {
     title: blog.title,
-    description: blog.content.replace(/<[^>]+>/g, "").slice(0, 50),
+    description: blog.summary,
     openGraph: {
       title: blog.title,
-      description: blog.content.replace(/<[^>]+>/g, "").slice(0, 50),
+      description: blog.summary,
       // images: ["/some-specific-page-image.jpg", ...previousImages],
     },
   };
@@ -38,13 +42,14 @@ export default async function BlogPostPage({ params }: Props) {
   const { id } = await params;
   // 記事取得を取得
   const blog = await getPost(id);
+
   // dayjsを使ってpublishedAtをYY.MM.DD形式に
   const formattedPublishedAt = dayjs(blog.publishedAt).format("YYYY/MM/DD");
   const formattedUpdatedAt = dayjs(blog.updatedAt).format("YYYY/MM/DD");
 
   return (
     <Container>
-      <div className="pt-10 sm:pt-20 py-5">
+      <div className="pt-10 sm:pt-28 pb-10 border-b-4 border-gray-400">
         <h1 className="text-2xl mb-2">{blog.title}</h1>
         {blog.category.length !== 0 && (
           <p className="mr-4 text-sm">
@@ -67,7 +72,11 @@ export default async function BlogPostPage({ params }: Props) {
                   break;
               }
               return (
-                <Link href={`/category/${category}`} key={cat.id} className="mr-2 bg-customgray px-2 rounded-sm">
+                <Link
+                  href={`/category/${category}`}
+                  key={cat.id}
+                  className="mr-2 bg-customgray px-2 rounded-sm"
+                >
                   {cat.title}
                 </Link>
               );
@@ -77,7 +86,8 @@ export default async function BlogPostPage({ params }: Props) {
         <p>
           <small>
             {formattedPublishedAt}
-            {formattedPublishedAt !== formattedUpdatedAt && ` -最終更新日:${formattedUpdatedAt}`}
+            {formattedPublishedAt !== formattedUpdatedAt &&
+              ` -最終更新日:${formattedUpdatedAt}`}
           </small>
         </p>
       </div>
