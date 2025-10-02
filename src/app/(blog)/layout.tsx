@@ -29,7 +29,7 @@ export default function BlogLayout({
   return (
     <html lang="ja">
       <body className={`${zenKaku.variable} antialiased`}>
-        <div className="font-zengothic grid grid-rows-[1fr_auto] min-h-screen w-full">
+        <div className="font-zengothic grid grid-rows-[1fr_auto] grid-cols-1 min-h-screen w-full">
           <header className="py-2 mx-auto fixed bottom-0 sm:bottom-auto sm:top-0 sm:backdrop-blur-xl w-full bg-background sm:bg-inherit border-t sm:border-none border-customgray z-10">
             <nav className="grid grid-cols-3 sm:flex justify-center gap-5 mx-auto w-11/12 max-w-screen-xl uppercase">
               <Link
