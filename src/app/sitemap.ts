@@ -39,14 +39,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let blogPages: MetadataRoute.Sitemap = [];
   try {
     const blogIds = await getAllContentIds();
-    blogPages = blogIds.map((id: string) => ({
-      url: `${baseUrl}/${id}`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.5,
-    }));
+    if (Array.isArray(blogIds) && blogIds.length > 0) {
+      blogPages = blogIds.map((id: string) => ({
+        url: `${baseUrl}/${id}`,
+        lastModified: new Date(),
+        changeFrequency: "monthly" as const,
+        priority: 0.5,
+      }));
+    } else {
+      console.warn("No blog IDs found or empty array returned");
+    }
   } catch (error) {
     console.error("Failed to fetch blog IDs for sitemap:", error);
+    // エラーが発生してもサイトマップは生成する（静的ページのみ）
   }
 
   return [...staticPages, ...categoryPages, ...blogPages];
