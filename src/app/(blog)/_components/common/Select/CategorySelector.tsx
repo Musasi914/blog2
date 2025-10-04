@@ -11,7 +11,11 @@ const categoryList = [
   { name: "リリース", value: "release" },
 ];
 
-export default function CategorySelector({ visiting }: { visiting?: CategoryType }) {
+export default function CategorySelector({
+  visiting,
+}: {
+  visiting?: CategoryType;
+}) {
   const router = useRouter();
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
@@ -20,7 +24,9 @@ export default function CategorySelector({ visiting }: { visiting?: CategoryType
   };
 
   const getLatestBlogs = useCallback(async () => {
-    sessionStorage.removeItem(visiting ? `${visiting}-scrollPosition` : "scrollPosition");
+    sessionStorage.removeItem(
+      visiting ? `${visiting}-scrollPosition` : "scrollPosition"
+    );
     sessionStorage.removeItem(visiting ? visiting : "blogList");
     window.location.reload();
   }, [visiting]);
@@ -32,6 +38,7 @@ export default function CategorySelector({ visiting }: { visiting?: CategoryType
         className="flex-1 border text-sm rounded-lg block  p-2.5 bg-background border-gray-600 placeholder-gray-400  focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
         defaultValue={visiting ?? "all"}
         onChange={handleChange}
+        aria-label="カテゴリで絞り込む"
       >
         <option value="all">All</option>
         {categoryList.map((categoryData) => (
@@ -41,7 +48,10 @@ export default function CategorySelector({ visiting }: { visiting?: CategoryType
         ))}
       </select>
       <div className="z-10">
-        <button className="bg-black block w-full h-full text-foreground px-4 py-2 rounded-md " onClick={getLatestBlogs}>
+        <button
+          className="bg-black block w-full h-full text-foreground px-4 py-2 rounded-md "
+          onClick={getLatestBlogs}
+        >
           最新記事の取得
         </button>
       </div>

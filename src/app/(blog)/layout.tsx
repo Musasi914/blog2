@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
   description: "福沢コウの自分振り帰り用途のサイトです。",
   alternates: {
-    canonical: "https://blog2-one-phi.vercel.app/",
+    canonical: "https://www.koh-fukuzawa.jp/",
   },
 };
 
@@ -52,10 +52,7 @@ export default function BlogLayout({
               </Link>
             </nav>
           </header>
-          <main>{children}</main>
-          <footer className="py-3 text-center mb-14 sm:mb-0">
-            &copy; 2025 Koh Fukuzawa Diary
-          </footer>
+          <main className="mb-24 sm:mb-0">{children}</main>
         </div>
       </body>
       <GoogleAnalytics gaId="G-033R4YB0LF" />
