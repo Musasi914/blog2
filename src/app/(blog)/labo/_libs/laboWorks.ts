@@ -9,6 +9,14 @@ export type LaboArrayProps = {
 
 const LaboArray = [
   {
+    title: "ポートフォリオ",
+    description:
+      "ポートフォリオです。こういうサイトが作りたかった！というサイトを作りました。満足です",
+    publish: "2025/10/03",
+    url: "https://koh-fukuzawa.com",
+    learn: ["Three.js"],
+  },
+  {
     title: "ハンズオンブログ",
     description:
       "著「作って学ぶ Next.js/React Webサイト構築」でハンズオン形式で作ったブログです。バニラjsで作っていたのでTypeScriptでブログ作り直すのが小さい目標地点だったので、クリアしました。",

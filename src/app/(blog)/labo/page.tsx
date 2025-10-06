@@ -13,7 +13,7 @@ export default function Labo() {
   return (
     <div>
       <Intro title="LABO">作ったものや実験</Intro>
-      <Container>
+      <Container customClass="sm:mb-40">
         <ul>
           {laboWorks.map((work) => (
             <ListUnderline key={work.title} className="px-2 py-5">

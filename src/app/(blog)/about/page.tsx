@@ -12,46 +12,46 @@ export default function About() {
   return (
     <div>
       <Intro title="ABOUT">このブログについて</Intro>
-      <Container customClass="space-y-12">
+      <Container customClass="space-y-12 sm:mb-40">
         <section>
-          <TitleH2>使用技術</TitleH2>
-          <ul className="list-disc list-inside">
-            <li>React</li>
-            <li>Next.js</li>
-            <li>TypeScript</li>
-            <li>Tailwind.css</li>
-            <li>Vercel</li>
-            <li>MicroCMS</li>
-            <li>
-              その他
-              <ul className="list-[circle] list-inside ml-7">
-                <li>cheerio</li>
-                <li>highlight.js</li>
-                <li>--他ページにて--</li>
-                <li>syntaxhighlighter</li>
-                <li>lenis</li>
-                <li>clsx</li>
-              </ul>
-            </li>
-          </ul>
+          <TitleH2>ブログ訪問ありがとうございます</TitleH2>
+          <p>
+            どこからかこの日記帳にたどり着き、ABOUTまで来ていただきありがとうございます。
+          </p>
+          <p>
+            このブログは、2024年の11月くらいに、Next.jsやTypeScriptの勉強として作ったブログです。
+          </p>
+          <p>
+            そのため、デザインや機能はかなり雑なものです。
+            <br />
+            OGPとか未だに後回しにしてますしね。
+          </p>
+          <p>
+            いや、実際適当に作ったブログの適当なAboutページのこの文章を読んでいるあなたは、かなり私に興味がお有りですか？。
+          </p>
+          <p>
+            私は孤独なので、ぜひコンタクトをいただければと思います。
+            <a
+              href="https://x.com/WebDesignDialy/"
+              target="_blank"
+              rel="noopener"
+            >
+              X
+            </a>
+            、
+            <a href="https://www.linkedin.com/in/%E3%82%B3%E3%82%A6-%E7%A6%8F%E6%B2%A2-026817378/">
+              LinkedIn
+            </a>
+          </p>
+          <p>それでは、お読みいただきありがとうございました。</p>
         </section>
         <section>
-          <TitleH2>使用予定技術・やることリスト</TitleH2>
+          <TitleH2>やることリスト</TitleH2>
           <ul className="list-disc list-inside">
-            <li className="line-through">メタ設定</li>
-            <li className="line-through">header追従</li>
-            <li className="line-through">youtubeでみたモダンアニメーションをgsapで作る</li>
-            <li className="line-through">shadcn/ui</li>
-            <li className="line-through">css設計の復習</li>
-            <li className="line-through">インターネットの理解</li>
-            <li className="line-through">tailwindの理解</li>
-            <li className="line-through">three.js</li>
-            <li>ブログリスト分割ダウンロード</li>
             <li>OGP画像自動生成</li>
-            <li>カテゴリで絞り込み</li>
-            <li>blog増えたとき スクロールで追加読込される</li>
-            <li>アクセシビリティ</li>
-            <li>reactの深い理解</li>
+            <li>
+              ルートグループで作っていた記事を別URLに分離してシンプルにする
+            </li>
           </ul>
         </section>
         <section>
