@@ -8,6 +8,9 @@
     --foreground: #e2dad8;
     --color-gray: #534b4bed;
   }
+  html {
+    scrollbar-gutter: stable;
+  }
   body {
     color: var(--foreground);
     background: var(--background);
