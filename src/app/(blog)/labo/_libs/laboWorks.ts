@@ -11,7 +11,7 @@ const LaboArray = [
   {
     title: "ポートフォリオ",
     description:
-      "ポートフォリオです。こういうサイトが作りたかった！というサイトを作りました。満足です",
+      "ポートフォリオです。こういうサイトが作りたかった！というサイトを作りました。満足です。",
     publish: "2025/10/03",
     url: "https://koh-fukuzawa.com",
     learn: ["Three.js"],
