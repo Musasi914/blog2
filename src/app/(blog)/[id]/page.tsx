@@ -91,7 +91,7 @@ export default async function BlogPostPage({ params }: Props) {
           </small>
         </p>
       </div>
-      <div className="my-10">
+      <div className="mt-10 sm:mb-40">
         <ConvertHtml htmlStr={blog.content} />
       </div>
     </Container>

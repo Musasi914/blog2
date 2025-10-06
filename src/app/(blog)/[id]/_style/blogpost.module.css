@@ -113,6 +113,10 @@
   margin-block: 4rem;
 }
 
+.post a {
+  cursor: pointer;
+}
+
 @media (min-width: 640px) {
   .post div[data-filename] > pre {
     font-size: 0.8rem;
