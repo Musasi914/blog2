@@ -18,7 +18,7 @@ export default function Labo() {
           {laboWorks.map((work) => (
             <ListUnderline key={work.title} className="px-2 py-5">
               <h2 className="text-xl leading-none">{work.title}</h2>
-              <p className="md:text-sm my-2 mb-4">{work.description}</p>
+              <p className="md:text-sm my-2">{work.description}</p>
               <p className="text-sm opacity-70">
                 学び：
                 {work.learn.map((tech) => (
