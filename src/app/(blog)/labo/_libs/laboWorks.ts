@@ -26,11 +26,10 @@ const LaboArray = [
     learn: ["React", "Next.js"],
   },
   {
-    title: "2ちゃん風書き込み可能サイト",
+    title: "2ちゃん風書き込み可能サイト（閉鎖）",
     description:
       "初めてのfirebaseでいろいろ機能試しながら。mysqlの勉強ほんのちょっとしていたけど、こんなに簡単にバックエンド実装できるなんて...。と,ある意味感動やら絶望やらした思い出。",
     publish: "2024/11/16",
-    url: "https://post2-54693.web.app/",
     github: "https://github.com/Musasi914/postableblog",
     learn: [
       "firebase-auth",
