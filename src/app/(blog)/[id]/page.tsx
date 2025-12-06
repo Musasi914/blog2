@@ -45,7 +45,6 @@ export default async function BlogPostPage({ params }: Props) {
 
   // dayjsを使ってpublishedAtをYY.MM.DD形式に
   const formattedPublishedAt = dayjs(blog.publishedAt).format("YYYY/MM/DD");
-  const formattedUpdatedAt = dayjs(blog.updatedAt).format("YYYY/MM/DD");
 
   return (
     <Container>
@@ -86,11 +85,7 @@ export default async function BlogPostPage({ params }: Props) {
               </p>
             )}
             <p>
-              <small>
-                {formattedPublishedAt}
-                {formattedPublishedAt !== formattedUpdatedAt &&
-                  ` -最終更新日:${formattedUpdatedAt}`}
-              </small>
+              <small>{formattedPublishedAt}</small>
             </p>
           </div>
         </div>
