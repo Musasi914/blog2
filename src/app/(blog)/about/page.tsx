@@ -35,14 +35,14 @@ export default function About() {
                 rel="noopener"
                 className="underline hover:opacity-80"
               >
-                X
+                X（旧Twitter）
               </a>
-              、
+              {` `}
               <a
+                href="mailto:fuzekou@gmail.com"
                 className="underline hover:opacity-80"
-                href="https://www.linkedin.com/in/%E3%82%B3%E3%82%A6-%E7%A6%8F%E6%B2%A2-026817378/"
               >
-                LinkedIn
+                fuzekou@gmail.com
               </a>
             </p>
             <p>それでは、お読みいただきありがとうございました。</p>
@@ -56,6 +56,10 @@ export default function About() {
               ルートグループで作っていた記事を別URLに分離してシンプルにする
             </li>
           </ul>
+        </section>
+        <section>
+          <TitleH2>2025/12/06</TitleH2>
+          <p>鋭意勉強中。GLSLマスター目指してます。</p>
         </section>
         <section>
           <TitleH2>2025/7/23</TitleH2>

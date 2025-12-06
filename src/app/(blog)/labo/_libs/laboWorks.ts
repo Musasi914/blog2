@@ -9,12 +9,21 @@ export type LaboArrayProps = {
 
 const LaboArray = [
   {
+    title: "3D練習場",
+    description:
+      "3Dポートフォリオです。こういうサイトが作りたかった！というサイトを作りました。満足です。",
+    publish: "2025/10/03",
+    url: "https://three-training2.vercel.app/",
+    github: "https://github.com/Musasi914/three-training2",
+    learn: ["Three.js", "GLSL"],
+  },
+  {
     title: "ポートフォリオ",
     description:
       "ポートフォリオです。こういうサイトが作りたかった！というサイトを作りました。満足です。",
     publish: "2025/10/03",
     url: "https://koh-fukuzawa.com",
-    learn: ["Three.js"],
+    learn: ["Three.js", "Next.js", "GSAP"],
   },
   {
     title: "ハンズオンブログ",
