@@ -50,11 +50,11 @@ export default async function BlogPostPage({ params }: Props) {
   return (
     <Container>
       <div className="pt-10 sm:pt-28">
-        <div className="flex gap-8 items-center justify-center py-4 border-y border-dashed border-gray-400">
+        <div className="flex gap-x-8 gap-y-2 flex-wrap items-center justify-center py-4 border-y border-dashed border-gray-400 text-center">
           <h1 className="text-2xl mb-2">{blog.title}</h1>
           <div>
             {blog.category.length !== 0 && (
-              <p className="mr-4 text-sm">
+              <p className="flex gap-x-2 justify-center flex-wrap text-sm">
                 {blog.category.map((cat: BlogCategoryType) => {
                   let category;
                   switch (cat.title) {
@@ -77,7 +77,7 @@ export default async function BlogPostPage({ params }: Props) {
                     <Link
                       href={`/category/${category}`}
                       key={cat.id}
-                      className="mr-2 bg-customgray px-2 rounded-sm"
+                      className="bg-customgray px-2 rounded-sm hover:opacity-80"
                     >
                       {cat.title}
                     </Link>
@@ -95,7 +95,7 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
         </div>
       </div>
-      <div className="mt-20 sm:mb-40">
+      <div className="mt-16 sm:mb-40">
         <ConvertHtml htmlStr={blog.content} />
       </div>
     </Container>
