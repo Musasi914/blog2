@@ -49,49 +49,53 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <Container>
-      <div className="pt-10 sm:pt-28 pb-10 border-b-4 border-gray-400">
-        <h1 className="text-2xl mb-2">{blog.title}</h1>
-        {blog.category.length !== 0 && (
-          <p className="mr-4 text-sm">
-            {blog.category.map((cat: BlogCategoryType) => {
-              let category;
-              switch (cat.title) {
-                case "日記":
-                  category = "memory";
-                  break;
-                case "重要":
-                  category = "important";
-                  break;
-                case "リリース":
-                  category = "release";
-                  break;
-                case "覚えておきたい":
-                  category = "learn";
-                  break;
-                default:
-                  break;
-              }
-              return (
-                <Link
-                  href={`/category/${category}`}
-                  key={cat.id}
-                  className="mr-2 bg-customgray px-2 rounded-sm"
-                >
-                  {cat.title}
-                </Link>
-              );
-            })}
-          </p>
-        )}
-        <p>
-          <small>
-            {formattedPublishedAt}
-            {formattedPublishedAt !== formattedUpdatedAt &&
-              ` -最終更新日:${formattedUpdatedAt}`}
-          </small>
-        </p>
+      <div className="pt-10 sm:pt-28">
+        <div className="flex gap-8 items-center justify-center py-4 border-y border-dashed border-gray-400">
+          <h1 className="text-2xl mb-2">{blog.title}</h1>
+          <div>
+            {blog.category.length !== 0 && (
+              <p className="mr-4 text-sm">
+                {blog.category.map((cat: BlogCategoryType) => {
+                  let category;
+                  switch (cat.title) {
+                    case "日記":
+                      category = "memory";
+                      break;
+                    case "重要":
+                      category = "important";
+                      break;
+                    case "リリース":
+                      category = "release";
+                      break;
+                    case "覚えておきたい":
+                      category = "learn";
+                      break;
+                    default:
+                      break;
+                  }
+                  return (
+                    <Link
+                      href={`/category/${category}`}
+                      key={cat.id}
+                      className="mr-2 bg-customgray px-2 rounded-sm"
+                    >
+                      {cat.title}
+                    </Link>
+                  );
+                })}
+              </p>
+            )}
+            <p>
+              <small>
+                {formattedPublishedAt}
+                {formattedPublishedAt !== formattedUpdatedAt &&
+                  ` -最終更新日:${formattedUpdatedAt}`}
+              </small>
+            </p>
+          </div>
+        </div>
       </div>
-      <div className="mt-10 sm:mb-40">
+      <div className="mt-20 sm:mb-40">
         <ConvertHtml htmlStr={blog.content} />
       </div>
     </Container>
