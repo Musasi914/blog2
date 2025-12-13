@@ -11,7 +11,7 @@ const LaboArray = [
   {
     title: "3D練習場",
     description:
-      "3Dポートフォリオです。こういうサイトが作りたかった！というサイトを作りました。満足です。",
+      "3D練習場です。3Dの勉強に使っています。多分4代目くらいです。今まで見やすくしたものがなかったので作りました。",
     publish: "2025/10/03",
     url: "https://three-training2.vercel.app/",
     github: "https://github.com/Musasi914/three-training2",
