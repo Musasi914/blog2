@@ -8,6 +8,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Pagenation from "../_components/common/Pagenation";
 import { Suspense } from "react";
+import Spinner from "../_components/common/Spinner/Spinner";
 const ConvertHtml = dynamic(
   () => import("@/app/(blog)/_components/layout/ConvertHtml")
 );
@@ -95,7 +96,7 @@ export default async function BlogPostPage({ params }: Props) {
       <div className="mt-16">
         <ConvertHtml htmlStr={blog.content} />
       </div>
-      <Suspense>
+      <Suspense fallback={<Spinner />}>
         <Pagenation currentPublishedAt={blog.publishedAt as string} />
       </Suspense>
     </Container>
