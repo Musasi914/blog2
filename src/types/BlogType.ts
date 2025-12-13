@@ -11,4 +11,11 @@ export type BlogType = {
   category: BlogCategoryType[];
 };
 
+export type PagenationGetBlogType = {
+  id: string;
+  title: string;
+  publishedAt: string;
+  category: { title: string }[];
+};
+
 export type CategoryType = "memory" | "release" | "important" | "learn";
