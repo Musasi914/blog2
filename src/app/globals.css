@@ -7,6 +7,7 @@
     --background: #242220;
     --foreground: #e2dad8;
     --color-gray: #534b4bed;
+    --color-customgray: rgb(156 163 175);
   }
   html {
     scrollbar-gutter: stable;
