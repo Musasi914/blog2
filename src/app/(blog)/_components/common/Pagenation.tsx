@@ -11,8 +11,8 @@ export default async function Pagenation({
   const nextPost = await getNextPost(currentPublishedAt);
   const prevPost = await getPrevPost(currentPublishedAt);
   return (
-    <div className="flex gap-y-8 items-center border-t border-gray-400 mt-20 sm:mt-40 pt-4 flex-col sm:flex-row">
-      <p className="flex-1">
+    <div className="flex gap-y-8 items-center mt-20 sm:mt-40 pt-4 flex-col sm:flex-row">
+      <div className="flex-1">
         {prevPost ? (
           <Link
             className="flex items-center gap-x-4 hover:opacity-80"
@@ -39,8 +39,8 @@ export default async function Pagenation({
         ) : (
           <span className="block"></span>
         )}
-      </p>
-      <p className="flex-1">
+      </div>
+      <div className="flex-1">
         {nextPost ? (
           <Link
             className="flex sm:flex-row-reverse items-center gap-x-4 hover:opacity-80"
@@ -67,7 +67,7 @@ export default async function Pagenation({
         ) : (
           <span className="block"></span>
         )}
-      </p>
+      </div>
     </div>
   );
 }

@@ -50,7 +50,7 @@ export default async function BlogPostPage({ params }: Props) {
   const formattedPublishedAt = dayjs(blog.publishedAt).format("YYYY/MM/DD");
 
   return (
-    <Container customClass="sm:mb-40">
+    <Container customClass="sm:mb-10">
       <div className="pt-10 sm:pt-28">
         <div className="flex gap-x-8 gap-y-2 flex-wrap items-center justify-center py-4 border-y border-dashed border-gray-400 text-center">
           <h1 className="text-2xl mb-2">{blog.title}</h1>
