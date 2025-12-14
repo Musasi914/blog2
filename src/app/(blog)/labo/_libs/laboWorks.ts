@@ -26,6 +26,15 @@ const LaboArray = [
     learn: ["Three.js", "Next.js", "GSAP"],
   },
   {
+    title: "アニメーション練習場",
+    description:
+      "サイトアニメーションを練習します。これまたどしどしつくっていくぞ。",
+    publish: "2025/12/10",
+    url: "https://site-training-zeta.vercel.app/site3",
+    github: "https://github.com/Musasi914/site-training",
+    learn: ["GSAP", "React", "TypeScript"],
+  },
+  {
     title: "ハンズオンブログ",
     description:
       "著「作って学ぶ Next.js/React Webサイト構築」でハンズオン形式で作ったブログです。バニラjsで作っていたのでTypeScriptでブログ作り直すのが小さい目標地点だったので、クリアしました。",
