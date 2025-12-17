@@ -30,7 +30,7 @@ const LaboArray = [
     description:
       "サイトアニメーションを練習します。これまたどしどしつくっていくぞ。",
     publish: "2025/12/10",
-    url: "https://site-training-zeta.vercel.app/site3",
+    url: "https://site-training-zeta.vercel.app/",
     github: "https://github.com/Musasi914/site-training",
     learn: ["GSAP", "React", "TypeScript"],
   },
