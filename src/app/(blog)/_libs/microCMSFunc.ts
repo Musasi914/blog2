@@ -41,6 +41,24 @@ export async function getAllContentIds() {
   return data as string[];
 }
 
+// sitemapよう
+export async function getSitemapIds() {
+  const targetCategoryIds = ["5plhbfsr2", "6x-voqyv7x_k", "djjof-818q"]; // release, learn, important
+
+  const data = await client.getAllContents({
+    endpoint: "blog",
+    queries: {
+      fields: "id,category.id",
+    },
+  });
+
+  const filteredBlogs = data.filter(
+    (blog: { id: string; category: { id: string }[] }) =>
+      blog.category.some((category) => targetCategoryIds.includes(category.id))
+  );
+  return filteredBlogs.map((blog) => blog.id);
+}
+
 // カテゴリ別ブログ取得
 export async function getBlogsFromCategory(
   category: CategoryType,

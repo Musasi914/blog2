@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { getAllContentIds } from "@/app/(blog)/_libs/microCMSFunc";
+import { getSitemapIds } from "@/app/(blog)/_libs/microCMSFunc";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://www.koh-fukuzawa.jp";
@@ -38,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 動的ブログページ
   let blogPages: MetadataRoute.Sitemap = [];
   try {
-    const blogIds = await getAllContentIds();
+    const blogIds = await getSitemapIds();
     if (Array.isArray(blogIds) && blogIds.length > 0) {
       blogPages = blogIds.map((id: string) => ({
         url: `${baseUrl}/${id}`,
