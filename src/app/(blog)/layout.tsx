@@ -5,9 +5,11 @@ import { Zen_Kaku_Gothic_New } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
 const zenKaku = Zen_Kaku_Gothic_New({
-  weight: ["300", "400", "700"],
+  weight: ["400", "700"],
   subsets: ["latin"],
   variable: "--font-zen-gothic",
+  display: "swap",
+  preload: false, // フォントpreloadを無効化（大量のpreloadファイル生成を防ぐ）
 });
 
 export const metadata: Metadata = {
