@@ -11,30 +11,30 @@ export default async function Pagenation({
   const nextPost = await getNextPost(currentPublishedAt);
   const prevPost = await getPrevPost(currentPublishedAt);
   return (
-    <div className="flex gap-y-8 items-center mt-20 sm:mt-40 pt-4 flex-row">
+    <div className="flex gap-x-4 sm:gap-x-8">
       <div className="flex-1">
         {prevPost ? (
           <Link
-            className="flex items-center gap-x-4 hover:opacity-80"
+            className="flex gap-x-4 hover:opacity-80"
             href={`/${prevPost.id}`}
           >
             <div className="basis-5 text-4xl">&lsaquo;</div>
             <div>
               <p className="line-clamp-1">{prevPost.title}</p>
-              <div className="flex gap-x-2 text-xs mt-4">
-                <p>
+              <div className="sm:flex gap-x-2 text-xs mt-2">
+                <p className="flex flex-col sm:flex-row items-start gap-y-1">
                   {prevPost.category.map((cat: { title: string }) => (
                     <span
                       key={cat.title}
-                      className="mr-2 bg-customgray px-2 rounded-sm"
+                      className="bg-customgray px-2 rounded-sm"
                     >
                       {cat.title}
                     </span>
                   ))}
                 </p>
-                <p className="hidden sm:block">
+                <time dateTime={prevPost.publishedAt}>
                   {dayjs(prevPost.publishedAt).format("YYYY/MM/DD")}
-                </p>
+                </time>
               </div>
             </div>
           </Link>
@@ -45,26 +45,26 @@ export default async function Pagenation({
       <div className="flex-1">
         {nextPost ? (
           <Link
-            className="flex flex-row-reverse items-center gap-x-4 hover:opacity-80"
+            className="flex flex-row-reverse gap-x-4 hover:opacity-80"
             href={`/${nextPost.id}`}
           >
             <div className="basis-5 text-4xl">&rsaquo;</div>
             <div>
-              <p className="line-clamp-1">{nextPost.title}</p>
-              <div className="flex justify-end gap-x-2 text-xs mt-4">
-                <p>
+              <p className="line-clamp-1 text-right">{nextPost.title}</p>
+              <div className="flex flex-col sm:flex-row items-end sm:items-start justify-end gap-x-2 text-xs mt-2">
+                <p className="flex flex-col sm:flex-row items-end gap-y-1 gap-x-2">
                   {nextPost.category.map((cat: { title: string }) => (
                     <span
                       key={cat.title}
-                      className="mr-2 bg-customgray px-2 rounded-sm"
+                      className="bg-customgray px-2 rounded-sm"
                     >
                       {cat.title}
                     </span>
                   ))}
                 </p>
-                <p className="hidden sm:block">
+                <time dateTime={nextPost.publishedAt}>
                   {dayjs(nextPost.publishedAt).format("YYYY/MM/DD")}
-                </p>
+                </time>
               </div>
             </div>
           </Link>

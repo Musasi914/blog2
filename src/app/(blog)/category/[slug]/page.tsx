@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Intro from "@/app/(blog)/_components/layout/Intro";
 import Container from "@/app/(blog)/_components/layout/Container";
 import BlogList from "@/app/(blog)/_components/layout/BlogList";
-import CategorySelector from "../../_components/common/Select/CategorySelector";
 import { Suspense } from "react";
 import BlogListFallback from "../../_components/fallback/BlogListFallback";
 import { notFound } from "next/navigation";
