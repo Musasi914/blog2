@@ -43,7 +43,7 @@ Promise<Metadata> {
 export const revalidate = 3600; // ISR: 1日ごとに再検証
 
 export async function generateStaticParams() {
-  const ids = (await getAllContentIds()).slice(0, 20);
+  const ids = await getAllContentIds();
   return ids.map((id: string) => ({ id }));
 }
 
