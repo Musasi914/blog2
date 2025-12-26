@@ -5,8 +5,8 @@ import {
 } from "@/types/BlogType";
 import { BASE_URL } from "./data";
 
-// 最初10件取得(SSG用)
-export async function getBlogsForSSG(limit = 10, offset = 0) {
+// 最初10件取得(ISR用)
+export async function getInitialBlogs(limit = 10, offset = 0) {
   const response = await fetch(
     `${BASE_URL}/api/v1/blog?limit=${limit}&offset=${offset}`,
     {
@@ -14,7 +14,7 @@ export async function getBlogsForSSG(limit = 10, offset = 0) {
         "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
       },
       method: "GET",
-      cache: "force-cache", // ビルド時にのみ実行
+      // next: { revalidate: 86400 }, // ISR: 1日ごとに再検証
     }
   );
   const data = await response.json();
@@ -51,7 +51,7 @@ export async function getAllContentIds(): Promise<string[]> {
           "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
         },
         method: "GET",
-        cache: "force-cache", // ビルド時にのみ実行
+        // next: { revalidate: 86400 }, // ISR: 1日ごとに再検証
       }
     );
     const data = await response.json();
@@ -71,7 +71,7 @@ export async function getPost(id: string) {
       "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
     },
     method: "GET",
-    next: { revalidate: 3600 * 24 }, // ISR: 1日ごとに再検証（オプション）
+    // next: { revalidate: 86400 }, // ISR: 1日ごとに再検証（オプション）
   });
   const data = await response.json();
   return data as BlogType;
@@ -145,7 +145,7 @@ export async function getBlogsFromCategory(
         "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
       },
       method: "GET",
-      cache: "no-store", // 動的なデータなのでキャッシュしない
+      // next: { revalidate: 86400 }, // ISR: 1日ごとに再検証
     }
   );
   const data = await response.json();
@@ -164,7 +164,7 @@ export async function getNextPost(
           "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
         },
         method: "GET",
-        next: { revalidate: 3600 * 24 }, // ISR: 1日ごとに再検証
+        // next: { revalidate: 86400 }, // ISR: 1日ごとに再検証
       }
     );
     const data = await response.json();
@@ -187,7 +187,7 @@ export async function getPrevPost(
           "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
         },
         method: "GET",
-        next: { revalidate: 3600 * 24 }, // ISR: 1日ごとに再検証
+        // next: { revalidate: 86400 }, // ISR: 1日ごとに再検証
       }
     );
     const data = await response.json();

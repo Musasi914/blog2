@@ -10,6 +10,8 @@ type CategoryProps = {
   params: Promise<{ slug: "learn" | "important" | "release" | "memory" }>;
 };
 
+export const revalidate = 86400; // ISR: 1日ごとに再検証
+
 export async function generateMetadata({
   params,
 }: CategoryProps): Promise<Metadata> {
