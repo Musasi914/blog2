@@ -42,6 +42,11 @@ Promise<Metadata> {
 
 export const revalidate = 86400; // ISR: 1日ごとに再検証
 
+export async function generateStaticParams() {
+  const ids = await getAllContentIds();
+  return ids.map((id: string) => ({ id }));
+}
+
 export default async function BlogPostPage({ params }: Props) {
   // params.idから
   const { id } = await params;
@@ -103,9 +108,4 @@ export default async function BlogPostPage({ params }: Props) {
       </Suspense>
     </Container>
   );
-}
-
-export async function generateStaticParams() {
-  const ids = await getAllContentIds();
-  return ids.map((id: string) => ({ id }));
 }
