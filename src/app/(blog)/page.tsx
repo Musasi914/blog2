@@ -3,7 +3,7 @@ import Intro from "@/app/(blog)/_components/layout/Intro";
 import BlogList from "@/app/(blog)/_components/layout/BlogList";
 import { getInitialBlogs } from "./_libs/microCMSFunc";
 
-export const revalidate = 86400; // ISR: 1日ごとに再検証
+export const revalidate = 3600; // ISR: 1日ごとに再検証
 
 export default async function Home() {
   const initialBlogs = await getInitialBlogs();
