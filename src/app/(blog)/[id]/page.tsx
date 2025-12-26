@@ -103,7 +103,6 @@ export default async function BlogPostPage({ params }: Props) {
   );
 }
 
-// SGにするらしい
 export async function generateStaticParams() {
   const ids = await getAllContentIds();
   return ids.map((id: string) => ({ id }));

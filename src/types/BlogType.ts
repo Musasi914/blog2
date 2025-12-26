@@ -9,6 +9,7 @@ export type BlogType = {
   title: string;
   summary?: string;
   category: BlogCategoryType[];
+  content: string;
 };
 
 export type PagenationGetBlogType = {
