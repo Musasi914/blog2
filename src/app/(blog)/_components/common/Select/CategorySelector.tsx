@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { CategoryType } from "@/types/BlogType";
-import { useCallback } from "react";
 
 const categoryList = [
   { name: "日記", value: "memory" },
@@ -23,38 +22,29 @@ export default function CategorySelector({
     else router.push(`/category/${value}`);
   };
 
-  const getLatestBlogs = useCallback(async () => {
-    sessionStorage.removeItem(
-      visiting ? `${visiting}-scrollPosition` : "scrollPosition"
-    );
-    sessionStorage.removeItem(visiting ? visiting : "blogList");
-    window.location.reload();
-  }, [visiting]);
-
   return (
     <div className="flex gap-4 align-center">
       <select
         name="select category"
-        className="flex-1 border text-sm rounded-lg block  p-2.5 bg-background border-gray-600 placeholder-gray-400  focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+        className="flex-1 border text-sm rounded-lg block p-2.5 bg-background border-gray-600 placeholder-gray-400  focus:ring-blue-500 focus:border-blue-500 cursor-pointer appearance-none"
         defaultValue={visiting ?? "all"}
         onChange={handleChange}
         aria-label="カテゴリで絞り込む"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg fill='none' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M6 8l4 4 4-4' stroke='%236B7280' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>\")",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "right 0.5rem center",
+          backgroundSize: "1.5em 1.5em",
+        }}
       >
-        <option value="all">All</option>
+        <option value="all">カテゴリ選択： All</option>
         {categoryList.map((categoryData) => (
           <option key={categoryData.value} value={categoryData.value}>
             {categoryData.name}
           </option>
         ))}
       </select>
-      <div className="z-10">
-        <button
-          className="bg-black block w-full h-full text-foreground px-4 py-2 rounded-md "
-          onClick={getLatestBlogs}
-        >
-          最新記事の取得
-        </button>
-      </div>
     </div>
   );
 }
