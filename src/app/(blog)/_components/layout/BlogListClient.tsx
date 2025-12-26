@@ -13,10 +13,15 @@ type Props = {
     offset: number,
     category?: CategoryType
   ) => Promise<BlogType[]>;
+  initialBlogs?: BlogType[];
 };
 
-export default function BlogListClient({ category, fetchBlogs }: Props) {
-  const [blogs, setBlogs] = useState<BlogType[]>([]);
+export default function BlogListClient({
+  category,
+  fetchBlogs,
+  initialBlogs,
+}: Props) {
+  const [blogs, setBlogs] = useState<BlogType[]>(initialBlogs || []);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
@@ -36,11 +41,13 @@ export default function BlogListClient({ category, fetchBlogs }: Props) {
     }
     if (savedBlogs) {
       setBlogs(JSON.parse(savedBlogs));
+    } else if (initialBlogs && initialBlogs.length > 0) {
+      setBlogs(initialBlogs);
     } else {
       loadMore();
     }
     setIsInitialLoad(false);
-  }, [category]);
+  }, [category, initialBlogs]);
 
   /**
    * セッションストレージへの保存

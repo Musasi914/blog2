@@ -5,6 +5,22 @@ import {
 } from "@/types/BlogType";
 import { BASE_URL } from "./data";
 
+// 最初10件取得(SSG用)
+export async function getBlogsForSSG(limit = 10, offset = 0) {
+  const response = await fetch(
+    `${BASE_URL}/api/v1/blog?limit=${limit}&offset=${offset}`,
+    {
+      headers: {
+        "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
+      },
+      method: "GET",
+      cache: "force-cache", // ビルド時にのみ実行
+    }
+  );
+  const data = await response.json();
+  return data.contents as BlogType[];
+}
+
 // 全ブログ取得（Server Action用 - 動的）
 export async function getBlogs(limit = 10, offset = 0) {
   const response = await fetch(
