@@ -40,6 +40,8 @@ Promise<Metadata> {
   };
 }
 
+export const revalidate = 86400; // ISR: 1日ごとに再検証
+
 export default async function BlogPostPage({ params }: Props) {
   // params.idから
   const { id } = await params;
@@ -93,7 +95,7 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
         </div>
       </div>
-      <div className="mt-16">
+      <div className="mt-16 mb-28 sm:mb-40">
         <ConvertHtml htmlStr={blog.content} />
       </div>
       <Suspense fallback={<Spinner />}>
