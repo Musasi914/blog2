@@ -8,7 +8,11 @@ const LIMIT = 10;
 
 type Props = {
   category?: CategoryType;
-  fetchBlogs: (limit: number, offset: number, category?: CategoryType) => Promise<BlogType[]>;
+  fetchBlogs: (
+    limit: number,
+    offset: number,
+    category?: CategoryType
+  ) => Promise<BlogType[]>;
 };
 
 export default function BlogListClient({ category, fetchBlogs }: Props) {
@@ -43,7 +47,9 @@ export default function BlogListClient({ category, fetchBlogs }: Props) {
    */
   useEffect(() => {
     if (blogs.length > 0) {
-      const uniqueBlogs = Array.from(new Map(blogs.map((blog) => [blog.id, blog])).values());
+      const uniqueBlogs = Array.from(
+        new Map(blogs.map((blog) => [blog.id, blog])).values()
+      );
       if (category) {
         sessionStorage.setItem(category, JSON.stringify(uniqueBlogs));
       } else {
@@ -64,7 +70,9 @@ export default function BlogListClient({ category, fetchBlogs }: Props) {
     if (newBlogs.length < LIMIT) setHasMore(false);
     setBlogs((prev) => {
       const allBlogs = [...prev, ...newBlogs];
-      const uniqueBlogs = Array.from(new Map(allBlogs.map((blog) => [blog.id, blog])).values());
+      const uniqueBlogs = Array.from(
+        new Map(allBlogs.map((blog) => [blog.id, blog])).values()
+      );
       return uniqueBlogs;
     });
     setLoading(false);
@@ -95,7 +103,9 @@ export default function BlogListClient({ category, fetchBlogs }: Props) {
    */
   useEffect(() => {
     // 保存されたスクロール位置を復元
-    const savedScrollPosition = sessionStorage.getItem(category ? `${category}-scrollPosition` : "scrollPosition");
+    const savedScrollPosition = sessionStorage.getItem(
+      category ? `${category}-scrollPosition` : "scrollPosition"
+    );
     if (savedScrollPosition && parseInt(savedScrollPosition) > 0) {
       setTimeout(() => {
         window.scrollTo(0, parseInt(savedScrollPosition));
@@ -109,14 +119,23 @@ export default function BlogListClient({ category, fetchBlogs }: Props) {
   useEffect(() => {
     // スクロール位置を取得する関数
     const getScrollPosition = () => {
-      return window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset || 0;
+      return (
+        window.scrollY ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        window.pageYOffset ||
+        0
+      );
     };
 
     // スクロールイベントでリアルタイム保存
     const handleScroll = () => {
       const currentScrollPosition = getScrollPosition();
       if (currentScrollPosition > 0) {
-        sessionStorage.setItem(category ? `${category}-scrollPosition` : "scrollPosition", currentScrollPosition.toString());
+        sessionStorage.setItem(
+          category ? `${category}-scrollPosition` : "scrollPosition",
+          currentScrollPosition.toString()
+        );
       }
     };
     window.addEventListener("scroll", handleScroll);
