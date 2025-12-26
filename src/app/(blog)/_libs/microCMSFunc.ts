@@ -3,63 +3,99 @@ import {
   CategoryType,
   PagenationGetBlogType,
 } from "@/types/BlogType";
-import { createClient } from "microcms-js-sdk";
-export const client = createClient({
-  serviceDomain: process.env.SERVICE_DOMAIN || "",
-  apiKey: process.env.MICROCMS_API_KEY || "",
-});
+import { BASE_URL } from "./data";
 
-// 全ブログ取得
+// 全ブログ取得（Server Action用 - 動的）
 export async function getBlogs(limit = 10, offset = 0) {
-  // await new Promise((resolve) => setTimeout(resolve, 2000));
-  const data = await client.get({
-    endpoint: "blog",
-    queries: {
-      limit,
-      offset,
-      fields: "id,title,summary,publishedAt,category.id,category.title",
-      orders: "-publishedAt",
-    },
-  });
+  const response = await fetch(
+    `${BASE_URL}/api/v1/blog?limit=${limit}&offset=${offset}`,
+    {
+      headers: {
+        "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
+      },
+      method: "GET",
+      cache: "no-store", // 動的なデータなのでキャッシュしない
+    }
+  );
+  const data = await response.json();
   return data.contents as BlogType[];
 }
 
-// 特定のブログ取得
+// 静的生成用: 全記事ID取得
+export async function getAllContentIds(): Promise<string[]> {
+  let offset = 0;
+  const limit = 100;
+  let ids: string[] = [];
+
+  while (true) {
+    const response = await fetch(
+      `${BASE_URL}/api/v1/blog?limit=${limit}&offset=${offset}&fields=id`,
+      {
+        headers: {
+          "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
+        },
+        method: "GET",
+        cache: "force-cache", // ビルド時にのみ実行
+      }
+    );
+    const data = await response.json();
+    ids.push(...data.contents.map((c: { id: string }) => c.id));
+
+    if (data.contents.length < limit) break;
+    offset += limit;
+  }
+
+  return ids;
+}
+
+// 特定のブログ取得（SSG用 - 静的生成）
 export async function getPost(id: string) {
-  const data = await client.get({
-    endpoint: "blog",
-    contentId: id,
+  const response = await fetch(`${BASE_URL}/api/v1/blog/${id}`, {
+    headers: {
+      "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
+    },
+    method: "GET",
+    next: { revalidate: 3600 * 24 }, // ISR: 1日ごとに再検証（オプション）
   });
-  return data as BlogType & { content: string };
+  const data = await response.json();
+  return data as BlogType;
 }
 
-// 静的生成用　idの配列取得
-export async function getAllContentIds() {
-  const data = await client.getAllContentIds({
-    endpoint: "blog",
-  });
-  return data as string[];
-}
-
-// sitemapよう
+// sitemap用（静的生成）
 export async function getSitemapIds() {
   const targetCategoryIds = ["5plhbfsr2", "6x-voqyv7x_k", "djjof-818q"]; // release, learn, important
 
-  const data = await client.getAllContents({
-    endpoint: "blog",
-    queries: {
-      fields: "id,category.id",
-    },
-  });
+  let offset = 0;
+  const limit = 100;
+  let ids: string[] = [];
 
-  const filteredBlogs = data.filter(
-    (blog: { id: string; category: { id: string }[] }) =>
-      blog.category.some((category) => targetCategoryIds.includes(category.id))
-  );
-  return filteredBlogs.map((blog) => blog.id);
+  // 正しいフィルタ構文: 各カテゴリIDに対してcategory[contains]を付ける
+  const filterQuery = targetCategoryIds
+    .map((id) => `category[contains]${id}`)
+    .join("[or]");
+
+  while (true) {
+    const res = await fetch(
+      `${BASE_URL}/api/v1/blog?filters=${filterQuery}&limit=${limit}&offset=${offset}&fields=id`,
+      {
+        headers: {
+          "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
+        },
+        method: "GET",
+        cache: "force-cache", // 静的生成用なのでキャッシュ
+      }
+    );
+    const data = await res.json();
+    ids.push(...data.contents.map((c: { id: string }) => c.id));
+
+    if (data.contents.length < limit) break;
+    offset += limit;
+  }
+
+  return ids;
 }
 
-// カテゴリ別ブログ取得
+// カテゴリ別ブログ取得（Server Action用 - 動的）
 export async function getBlogsFromCategory(
   category: CategoryType,
   limit = 10,
@@ -86,52 +122,62 @@ export async function getBlogsFromCategory(
     default:
       break;
   }
-  const data = await client.get({
-    endpoint: "blog",
-    queries: {
-      limit,
-      offset,
-      fields: "id,title,summary,publishedAt,category.id,category.title",
-      filters: `category[contains]${categoryVariants}`,
-      orders: "-publishedAt",
-    },
-  });
+  const response = await fetch(
+    `${BASE_URL}/api/v1/blog?filters=category[contains]${categoryVariants}&limit=${limit}&offset=${offset}`,
+    {
+      headers: {
+        "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
+      },
+      method: "GET",
+      cache: "no-store", // 動的なデータなのでキャッシュしない
+    }
+  );
+  const data = await response.json();
   return data.contents as BlogType[];
 }
 
-const PagenationgetFields = "id,title,publishedAt,category.title";
-// 次の記事（より新しい記事）を取得
-export async function getNextPost(currentPublishedAt: string) {
+// 次の記事（より新しい記事）を取得（SSG用）
+export async function getNextPost(
+  currentPublishedAt: string
+): Promise<PagenationGetBlogType | null> {
   try {
-    const data = await client.get({
-      endpoint: "blog",
-      queries: {
-        limit: 1,
-        fields: PagenationgetFields,
-        filters: `publishedAt[greater_than]${currentPublishedAt}`,
-        orders: "publishedAt", // 昇順（古い順）で1件目を取得 = 最も近い新しい記事
-      },
-    });
+    const response = await fetch(
+      `${BASE_URL}/api/v1/blog?filters=publishedAt[greater_than]${currentPublishedAt}&limit=1&fields=id,title,publishedAt,category.title&orders=publishedAt`,
+      {
+        headers: {
+          "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
+        },
+        method: "GET",
+        next: { revalidate: 3600 * 24 }, // ISR: 1日ごとに再検証
+      }
+    );
+    const data = await response.json();
     return (data.contents[0] as PagenationGetBlogType) || null;
-  } catch {
+  } catch (error) {
+    console.error("Error fetching next post:", error);
     return null;
   }
 }
 
-// 前の記事（より古い記事）を取得
-export async function getPrevPost(currentPublishedAt: string) {
+// 前の記事（より古い記事）を取得（SSG用）
+export async function getPrevPost(
+  currentPublishedAt: string
+): Promise<PagenationGetBlogType | null> {
   try {
-    const data = await client.get({
-      endpoint: "blog",
-      queries: {
-        limit: 1,
-        fields: PagenationgetFields,
-        filters: `publishedAt[less_than]${currentPublishedAt}`,
-        orders: "-publishedAt", // 降順（新しい順）で1件目を取得 = 最も近い古い記事
-      },
-    });
+    const response = await fetch(
+      `${BASE_URL}/api/v1/blog?filters=publishedAt[less_than]${currentPublishedAt}&limit=1&fields=id,title,publishedAt,category.title&orders=-publishedAt`,
+      {
+        headers: {
+          "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
+        },
+        method: "GET",
+        next: { revalidate: 3600 * 24 }, // ISR: 1日ごとに再検証
+      }
+    );
+    const data = await response.json();
     return (data.contents[0] as PagenationGetBlogType) || null;
-  } catch {
+  } catch (error) {
+    console.error("Error fetching prev post:", error);
     return null;
   }
 }
