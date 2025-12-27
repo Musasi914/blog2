@@ -5,6 +5,7 @@ import BlogList from "@/app/(blog)/_components/layout/BlogList";
 import { Suspense } from "react";
 import BlogListFallback from "../../_components/fallback/BlogListFallback";
 import { notFound } from "next/navigation";
+import { getBlogsFromCategory } from "../../_libs/microCMSFunc";
 
 type CategoryProps = {
   params: Promise<{ slug: "learn" | "important" | "release" | "memory" }>;
@@ -25,6 +26,11 @@ export async function generateMetadata({
       // images: ["/some-specific-page-image.jpg", ...previousImages],
     },
   };
+}
+
+export async function generateStaticParams() {
+  const categories = ["important", "memory", "release", "learn"];
+  return categories.map((category) => ({ slug: category }));
 }
 
 export default async function Category({ params }: CategoryProps) {
@@ -54,12 +60,13 @@ export default async function Category({ params }: CategoryProps) {
     default:
       break;
   }
+  const initialBlogs = await getBlogsFromCategory(category);
   return (
     <div>
       <Intro title="BLOG">カテゴリ：{categoryJapanese}</Intro>
       <Container>
         <Suspense fallback={<BlogListFallback />}>
-          <BlogList category={category} />
+          <BlogList category={category} initialBlogs={initialBlogs} />
         </Suspense>
       </Container>
     </div>

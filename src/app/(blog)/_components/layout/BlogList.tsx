@@ -23,7 +23,7 @@ export default function BlogList({
   initialBlogs,
 }: {
   category?: CategoryType;
-  initialBlogs?: BlogType[];
+  initialBlogs: BlogType[];
 }) {
   return (
     <>
