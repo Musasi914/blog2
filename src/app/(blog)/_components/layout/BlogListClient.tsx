@@ -5,6 +5,7 @@ import BlogItem from "../common/List/BlogItem";
 import Spinner from "../common/Spinner/Spinner";
 
 const LIMIT = 10;
+const CACHE_EXPIRY_TIME = 60 * 60 * 1000; // 1時間（ミリ秒）
 
 type Props = {
   category?: CategoryType;
@@ -13,7 +14,12 @@ type Props = {
     offset: number,
     category?: CategoryType
   ) => Promise<BlogType[]>;
-  initialBlogs?: BlogType[];
+  initialBlogs: BlogType[];
+};
+
+type CachedData = {
+  blogs: BlogType[];
+  timestamp: number;
 };
 
 export default function BlogListClient({
@@ -25,43 +31,52 @@ export default function BlogListClient({
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
-  // blog配列が最初空のため、すぐにobserverが動作してしまうため、isInitialLoadを使用して、最初のロードを防ぐ
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
-  const initialLoadRef = useRef(true);
 
   /**
-   * セッションストレージからの初期データ読み込み
+   * セッションストレージからの初期データ読み込み（1時間の有効期限チェック付き）
    */
   useEffect(() => {
-    let savedBlogs: string | null = null;
-    if (category) {
-      savedBlogs = sessionStorage.getItem(category);
+    const storageKey = category ? category : "blogList";
+    const savedData = sessionStorage.getItem(storageKey);
+
+    if (savedData) {
+      try {
+        const cached: CachedData = JSON.parse(savedData);
+        const now = Date.now();
+
+        // 1時間経過しているかチェック
+        if (cached.timestamp && now - cached.timestamp < CACHE_EXPIRY_TIME) {
+          // 有効期限内ならデータを使用
+          setBlogs(cached.blogs);
+        } else {
+          // 1時間経過していたらセッションストレージをクリア
+          sessionStorage.removeItem(storageKey);
+          setBlogs(initialBlogs);
+        }
+      } catch (e) {
+        // パースエラーなら削除
+        sessionStorage.removeItem(storageKey);
+        setBlogs(initialBlogs);
+      }
     } else {
-      savedBlogs = sessionStorage.getItem("blogList");
-    }
-    if (savedBlogs) {
-      setBlogs(JSON.parse(savedBlogs));
-    } else if (initialBlogs && initialBlogs.length > 0) {
       setBlogs(initialBlogs);
-    } else {
-      loadMore();
     }
-    setIsInitialLoad(false);
   }, [category, initialBlogs]);
 
   /**
-   * セッションストレージへの保存
+   * セッションストレージへの保存（タイムスタンプ付き）
    */
   useEffect(() => {
     if (blogs.length > 0) {
       const uniqueBlogs = Array.from(
         new Map(blogs.map((blog) => [blog.id, blog])).values()
       );
-      if (category) {
-        sessionStorage.setItem(category, JSON.stringify(uniqueBlogs));
-      } else {
-        sessionStorage.setItem("blogList", JSON.stringify(uniqueBlogs));
-      }
+      const storageKey = category ? category : "blogList";
+      const cachedData: CachedData = {
+        blogs: uniqueBlogs,
+        timestamp: Date.now(),
+      };
+      sessionStorage.setItem(storageKey, JSON.stringify(cachedData));
     }
   }, [blogs, category]);
 
@@ -69,7 +84,6 @@ export default function BlogListClient({
    * 無限スクロール
    */
   const loadMore = useCallback(async () => {
-    if (!initialLoadRef.current) return;
     if (loading || !hasMore) return;
     setLoading(true);
     const nextOffset = blogs.length;
@@ -91,7 +105,6 @@ export default function BlogListClient({
 
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
-        if (isInitialLoad) return;
         loadMore();
       }
     });
@@ -103,7 +116,7 @@ export default function BlogListClient({
         observer.unobserve(observerRef.current);
       }
     };
-  }, [hasMore, loadMore, isInitialLoad]);
+  }, [hasMore, loadMore]);
 
   /**
    * スクロール位置の復元（コンポーネントマウント時）

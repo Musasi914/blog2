@@ -5,23 +5,7 @@ import {
 } from "@/types/BlogType";
 import { BASE_URL } from "./data";
 
-// 最初10件取得(ISR用)
-export async function getInitialBlogs(limit = 10, offset = 0) {
-  const response = await fetch(
-    `${BASE_URL}/api/v1/blog?limit=${limit}&offset=${offset}`,
-    {
-      headers: {
-        "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
-      },
-      method: "GET",
-      // next: { revalidate: 3600 }, // ISR: 1日ごとに再検証
-    }
-  );
-  const data = await response.json();
-  return data.contents as BlogType[];
-}
-
-// 全ブログ取得（Server Action用 - 動的）
+// ブログ取得（Server Action用
 export async function getBlogs(limit = 10, offset = 0) {
   const response = await fetch(
     `${BASE_URL}/api/v1/blog?limit=${limit}&offset=${offset}`,
@@ -30,7 +14,6 @@ export async function getBlogs(limit = 10, offset = 0) {
         "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
       },
       method: "GET",
-      cache: "no-store", // 動的なデータなのでキャッシュしない
     }
   );
   const data = await response.json();
@@ -111,7 +94,7 @@ export async function getSitemapIds() {
   return ids;
 }
 
-// カテゴリ別ブログ取得（Server Action用 - 動的）
+// カテゴリ別ブログ取得
 export async function getBlogsFromCategory(
   category: CategoryType,
   limit = 10,
@@ -152,7 +135,7 @@ export async function getBlogsFromCategory(
   return data.contents as BlogType[];
 }
 
-// 次の記事（より新しい記事）を取得（SSG用）
+// 次の記事（より新しい記事）を取得
 export async function getNextPost(
   currentPublishedAt: string
 ): Promise<PagenationGetBlogType | null> {
@@ -175,7 +158,7 @@ export async function getNextPost(
   }
 }
 
-// 前の記事（より古い記事）を取得（SSG用）
+// 前の記事（より古い記事）を取得
 export async function getPrevPost(
   currentPublishedAt: string
 ): Promise<PagenationGetBlogType | null> {
