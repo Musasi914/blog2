@@ -22,7 +22,7 @@ export default async function Pagenation({
             <div>
               <p className="line-clamp-1">{prevPost.title}</p>
               <div className="sm:flex gap-x-2 text-xs mt-2">
-                <p className="flex flex-col sm:flex-row items-start gap-y-1">
+                <p className="flex flex-col sm:flex-row items-start gap-y-1 gap-x-2">
                   {prevPost.category.map((cat: { title: string }) => (
                     <span
                       key={cat.title}
