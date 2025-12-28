@@ -12,28 +12,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "daily" as const,
       priority: 1,
     },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/labo`,
-      lastModified: new Date(),
-      changeFrequency: "weekly" as const,
-      priority: 0.7,
-    },
   ];
 
   // カテゴリページ
-  const categories = ["memory", "release", "learn", "important"];
-  const categoryPages = categories.map((category) => ({
-    url: `${baseUrl}/category/${category}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: 0.6,
-  }));
+  // const categories = ["memory", "release", "learn", "important"];
+  // const categoryPages = categories.map((category) => ({
+  //   url: `${baseUrl}/category/${category}`,
+  //   lastModified: new Date(),
+  //   changeFrequency: "weekly" as const,
+  //   priority: 0.6,
+  // }));
 
   // 動的ブログページ
   let blogPages: MetadataRoute.Sitemap = [];
@@ -44,7 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: `${baseUrl}/${id}`,
         lastModified: new Date(),
         changeFrequency: "monthly" as const,
-        priority: 0.5,
+        priority: 0.8,
       }));
     } else {
       console.warn("No blog IDs found or empty array returned");
@@ -54,5 +42,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // エラーが発生してもサイトマップは生成する（静的ページのみ）
   }
 
-  return [...staticPages, ...categoryPages, ...blogPages];
+  return [...staticPages, ...blogPages];
 }

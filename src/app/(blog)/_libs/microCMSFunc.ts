@@ -62,7 +62,7 @@ export async function getPost(id: string) {
 
 // sitemap用（静的生成）
 export async function getSitemapIds() {
-  const targetCategoryIds = ["5plhbfsr2", "6x-voqyv7x_k", "djjof-818q"]; // release, learn, important
+  const targetCategoryIds = ["6x-voqyv7x_k"]; // learn
 
   let offset = 0;
   const limit = 100;
