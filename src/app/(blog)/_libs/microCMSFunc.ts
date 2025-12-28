@@ -8,7 +8,7 @@ import { BASE_URL } from "./data";
 // ブログ取得（Server Action用
 export async function getBlogs(limit = 10, offset = 0) {
   const response = await fetch(
-    `${BASE_URL}/api/v1/blog?limit=${limit}&offset=${offset}`,
+    `${BASE_URL}/api/v1/blog?limit=${limit}&offset=${offset}&orders=publishedAt`,
     {
       headers: {
         "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
@@ -122,7 +122,7 @@ export async function getBlogsFromCategory(
       break;
   }
   const response = await fetch(
-    `${BASE_URL}/api/v1/blog?filters=category[contains]${categoryVariants}&limit=${limit}&offset=${offset}`,
+    `${BASE_URL}/api/v1/blog?filters=category[contains]${categoryVariants}&limit=${limit}&offset=${offset}&orders=publishedAt`,
     {
       headers: {
         "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
