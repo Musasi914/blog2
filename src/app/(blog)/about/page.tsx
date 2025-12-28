@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import TitleH2 from "@/app/(blog)/_components/common/Title/TitleH2";
 import Container from "@/app/(blog)/_components/layout/Container";
 import Intro from "@/app/(blog)/_components/layout/Intro";
+import PushNotificationManager from "../_components/sw/PushNotificationManager";
 
 export const metadata: Metadata = {
   title: "About",
@@ -13,6 +14,10 @@ export default function About() {
     <div>
       <Intro title="ABOUT">このブログについて</Intro>
       <Container customClass="space-y-12 sm:mb-40">
+        <section>
+          <TitleH2>PWAプッシュ通知テスト</TitleH2>
+          <PushNotificationManager />
+        </section>
         <section>
           <TitleH2>ブログ訪問ありがとうございます</TitleH2>
           <div className="space-y-4">
