@@ -40,7 +40,7 @@ Promise<Metadata> {
   };
 }
 
-export const revalidate = 3600; // ISR: 1日ごとに再検証
+export const revalidate = 3600; // ISR: 1時間ごとに再検証
 
 export async function generateStaticParams() {
   const ids = await getAllContentIds();
