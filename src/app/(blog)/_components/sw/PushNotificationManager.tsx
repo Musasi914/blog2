@@ -1,5 +1,6 @@
 "use client";
 
+import type { SerializablePushSubscription } from "@/types/PushSubscriptionType";
 import { useState, useEffect } from "react";
 import {
   subscribeUser,
@@ -18,6 +19,29 @@ function urlBase64ToUint8Array(base64String: string) {
     outputArray[i] = rawData.charCodeAt(i);
   }
   return outputArray;
+}
+
+function serializeSubscription(
+  subscription: PushSubscription
+): SerializablePushSubscription {
+  const serializedSub = subscription.toJSON();
+
+  if (
+    !serializedSub.endpoint ||
+    !serializedSub.keys?.p256dh ||
+    !serializedSub.keys?.auth
+  ) {
+    throw new Error("Invalid push subscription");
+  }
+
+  return {
+    endpoint: serializedSub.endpoint,
+    expirationTime: serializedSub.expirationTime,
+    keys: {
+      p256dh: serializedSub.keys.p256dh,
+      auth: serializedSub.keys.auth,
+    },
+  };
 }
 
 export default function PushNotificationManager() {
@@ -52,7 +76,7 @@ export default function PushNotificationManager() {
       ),
     });
     setSubscription(sub);
-    const serializedSub = JSON.parse(JSON.stringify(sub));
+    const serializedSub = serializeSubscription(sub);
     await subscribeUser(serializedSub);
   }
 
@@ -64,7 +88,7 @@ export default function PushNotificationManager() {
 
   async function sendTestNotification() {
     if (subscription) {
-      await sendNotification(message);
+      await sendNotification(serializeSubscription(subscription), message);
       setMessage("");
     }
   }
