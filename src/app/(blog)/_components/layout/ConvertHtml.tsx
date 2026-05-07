@@ -2,6 +2,7 @@ import styles from "@/app/(blog)/[id]/_style/blogpost.module.css";
 import { load } from "cheerio";
 import hljs, { HighlightResult } from "highlight.js";
 import "highlight.js/styles/github-dark.css";
+import { sanitizeBlogHtml } from "@/app/(blog)/_libs/sanitizeBlogHtml";
 
 function getLanguageName(className: string) {
   return className
@@ -12,7 +13,7 @@ function getLanguageName(className: string) {
 
 export default function ConvertHtml({ htmlStr }: { htmlStr: string }) {
   // APIから取得したリッチエディタのHTMLからcheerioオブジェクトを生成
-  const $ = load(htmlStr);
+  const $ = load(sanitizeBlogHtml(htmlStr), undefined, false);
 
   // コードブロックのファイル名が入力されているとき
   $("div[data-filename]").each((_, elm) => {
