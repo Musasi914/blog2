@@ -102,8 +102,13 @@ export function sanitizeBlogHtml(htmlStr: string) {
       }
     });
 
-    if (tagName === "a" && $(elm).attr("target") === "_blank") {
-      $(elm).attr("rel", "noopener noreferrer");
+    if (tagName === "a") {
+      if (!$(elm).attr("href")) {
+        $(elm).removeAttr("rel");
+        $(elm).removeAttr("target");
+      } else if ($(elm).attr("target") === "_blank") {
+        $(elm).attr("rel", "noopener noreferrer");
+      }
     }
 
     if (tagName === "img" && !$(elm).attr("src")) {
