@@ -87,16 +87,20 @@ export function sanitizeBlogHtml(htmlStr: string) {
   ).remove();
 
   $("*").each((_, elm) => {
-    const tagName = elm.tagName.toLowerCase();
+    const element = elm as typeof elm & {
+      attribs?: Record<string, string>;
+      tagName: string;
+    };
+    const tagName = element.tagName.toLowerCase();
 
     if (!allowedTags.has(tagName)) {
       $(elm).replaceWith($(elm).contents());
       return;
     }
 
-    Object.keys(elm.attribs ?? {}).forEach((attributeName) => {
+    Object.keys(element.attribs ?? {}).forEach((attributeName) => {
       const normalizedAttributeName = attributeName.toLowerCase();
-      const value = elm.attribs[attributeName];
+      const value = element.attribs?.[attributeName] ?? "";
 
       if (
         normalizedAttributeName.startsWith("on") ||
