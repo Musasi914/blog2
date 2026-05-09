@@ -18,7 +18,7 @@
     "dayjs": "^1.11.13",
     "highlight.js": "^11.10.0",
     "lenis": "^1.1.18",
-    "next": "15.0.5",
+    "next": "15.5.18",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-syntax-highlighter": "^15.6.1",
