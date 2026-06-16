@@ -2,19 +2,21 @@ import {
   getBlogs,
   getBlogsFromCategory,
 } from "@/app/(blog)/_libs/microCMSFunc";
-import { BlogType, CategoryType } from "@/types/BlogType";
+import { BlogListQuery, BlogType, CategoryType } from "@/types/BlogType";
 import BlogListClient from "./BlogListClient";
-import CategorySelector from "@/app/(blog)/_components/common/Select/CategorySelector";
+import { Suspense } from "react";
+import BlogListFallback from "@/app/(blog)/_components/fallback/BlogListFallback";
 
 async function fetchBlogs(
   limit: number,
   offset: number,
-  category?: CategoryType
+  category?: CategoryType,
+  options?: BlogListQuery
 ) {
   "use server";
   const data = category
-    ? await getBlogsFromCategory(category, limit, offset)
-    : await getBlogs(limit, offset);
+    ? await getBlogsFromCategory(category, limit, offset, options)
+    : await getBlogs(limit, offset, options);
   return data;
 }
 
@@ -26,13 +28,12 @@ export default function BlogList({
   initialBlogs: BlogType[];
 }) {
   return (
-    <>
-      <CategorySelector visiting={category} />
+    <Suspense fallback={<BlogListFallback />}>
       <BlogListClient
         category={category}
         fetchBlogs={fetchBlogs}
         initialBlogs={initialBlogs}
       />
-    </>
+    </Suspense>
   );
 }

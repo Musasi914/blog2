@@ -1,23 +1,98 @@
 import {
+  BlogListQuery,
+  BlogSortOrder,
   BlogType,
   CategoryType,
   PagenationGetBlogType,
 } from "@/types/BlogType";
 import { BASE_URL } from "./data";
 
-// ブログ取得（Server Action用
-export async function getBlogs(limit = 10, offset = 0) {
-  const response = await fetch(
-    `${BASE_URL}/api/v1/blog?limit=${limit}&offset=${offset}&orders=-publishedAt`,
-    {
-      headers: {
-        "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
-      },
-      method: "GET",
-    }
-  );
+const CATEGORY_ID_MAP: Record<CategoryType, string> = {
+  memory: "sq6jyab_dcj",
+  release: "5plhbfsr2",
+  learn: "6x-voqyv7x_k",
+  important: "djjof-818q",
+};
+
+function getOrdersParam(sort: BlogSortOrder = "newest") {
+  return sort === "newest" ? "-publishedAt" : "publishedAt";
+}
+
+const MONTH_PATTERN = /^\d{4}-\d{2}$/;
+
+export function getMonthUpperBound(dateTo: string) {
+  const [yearStr, monthStr] = dateTo.split("-");
+  const year = Number(yearStr);
+  const month = Number(monthStr);
+
+  if (month === 12) {
+    return `${year + 1}-01-01`;
+  }
+
+  return `${year}-${String(month + 1).padStart(2, "0")}-01`;
+}
+
+function buildFilterParts(options?: BlogListQuery & { category?: CategoryType }) {
+  const parts: string[] = [];
+
+  if (options?.category) {
+    parts.push(`category[contains]${CATEGORY_ID_MAP[options.category]}`);
+  }
+
+  if (options?.dateFrom && MONTH_PATTERN.test(options.dateFrom)) {
+    parts.push(`publishedAt[greater_than]${options.dateFrom}-01`);
+  }
+
+  if (options?.dateTo && MONTH_PATTERN.test(options.dateTo)) {
+    parts.push(`publishedAt[less_than]${getMonthUpperBound(options.dateTo)}`);
+  }
+
+  return parts;
+}
+
+export function buildBlogListQuery(
+  limit: number,
+  offset: number,
+  options?: BlogListQuery & { category?: CategoryType }
+) {
+  const params = new URLSearchParams({
+    limit: String(limit),
+    offset: String(offset),
+    orders: getOrdersParam(options?.sort),
+  });
+
+  const query = options?.query?.trim();
+  if (query) {
+    params.set("q", query);
+  }
+
+  const filters = buildFilterParts(options).join("[and]");
+  if (filters) {
+    params.set("filters", filters);
+  }
+
+  return params.toString();
+}
+
+async function fetchBlogList(queryString: string) {
+  const response = await fetch(`${BASE_URL}/api/v1/blog?${queryString}`, {
+    headers: {
+      "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
+    },
+    method: "GET",
+  });
   const data = await response.json();
   return data.contents as BlogType[];
+}
+
+// ブログ取得（Server Action用
+export async function getBlogs(
+  limit = 10,
+  offset = 0,
+  options?: BlogListQuery
+) {
+  const queryString = buildBlogListQuery(limit, offset, options);
+  return fetchBlogList(queryString);
 }
 
 // 静的生成用: 全記事ID取得
@@ -98,41 +173,14 @@ export async function getSitemapIds() {
 export async function getBlogsFromCategory(
   category: CategoryType,
   limit = 10,
-  offset = 0
+  offset = 0,
+  options?: BlogListQuery
 ) {
-  let categoryVariants;
-  switch (category) {
-    case "memory":
-      categoryVariants = "sq6jyab_dcj";
-      break;
-
-    case "release":
-      categoryVariants = "5plhbfsr2";
-      break;
-
-    case "learn":
-      categoryVariants = "6x-voqyv7x_k";
-      break;
-
-    case "important":
-      categoryVariants = "djjof-818q";
-      break;
-
-    default:
-      break;
-  }
-  const response = await fetch(
-    `${BASE_URL}/api/v1/blog?filters=category[contains]${categoryVariants}&limit=${limit}&offset=${offset}&orders=-publishedAt`,
-    {
-      headers: {
-        "X-MICROCMS-API-KEY": process.env.MICROCMS_API_KEY || "",
-      },
-      method: "GET",
-      // next: { revalidate: 3600 }, // ISR: 1時間ごとに再検証
-    }
-  );
-  const data = await response.json();
-  return data.contents as BlogType[];
+  const queryString = buildBlogListQuery(limit, offset, {
+    ...options,
+    category,
+  });
+  return fetchBlogList(queryString);
 }
 
 // 次の記事（より新しい記事）を取得

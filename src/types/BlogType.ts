@@ -20,3 +20,12 @@ export type PagenationGetBlogType = {
 };
 
 export type CategoryType = "memory" | "release" | "important" | "learn";
+
+export type BlogSortOrder = "newest" | "oldest";
+
+export type BlogListQuery = {
+  query?: string;
+  sort?: BlogSortOrder;
+  dateFrom?: string;
+  dateTo?: string;
+};

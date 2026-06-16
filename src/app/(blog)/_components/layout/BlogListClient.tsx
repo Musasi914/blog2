@@ -1,8 +1,23 @@
 "use client";
 import { useState, useRef, useEffect, useCallback } from "react";
-import { BlogType, CategoryType } from "@/types/BlogType";
+import { useRouter, useSearchParams } from "next/navigation";
+import { BlogListQuery, BlogType, CategoryType } from "@/types/BlogType";
 import BlogItem from "../common/List/BlogItem";
 import Spinner from "../common/Spinner/Spinner";
+import BlogFilterBar from "../common/Filter/BlogFilterBar";
+import BlogFilterPanel from "../common/Filter/BlogFilterPanel";
+import CategorySelector from "../common/Select/CategorySelector";
+import {
+  BlogListFilters,
+  buildBlogListPath,
+  buildBlogListQueryOptions,
+  buildBlogListScrollKey,
+  buildBlogListStorageKey,
+  buildBlogListUrlQueryString,
+  hasActiveFilters,
+  normalizeDateRange,
+  parseBlogListFilters,
+} from "@/app/(blog)/_libs/blogListUrl";
 
 const LIMIT = 10;
 const CACHE_EXPIRY_TIME = 60 * 60 * 1000; // 1時間（ミリ秒）
@@ -12,7 +27,8 @@ type Props = {
   fetchBlogs: (
     limit: number,
     offset: number,
-    category?: CategoryType
+    category?: CategoryType,
+    options?: BlogListQuery
   ) => Promise<BlogType[]>;
   initialBlogs: BlogType[];
 };
@@ -27,16 +43,99 @@ export default function BlogListClient({
   fetchBlogs,
   initialBlogs,
 }: Props) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialFilters = parseBlogListFilters(searchParams);
+
+  const [filters, setFilters] = useState<BlogListFilters>(initialFilters);
   const [blogs, setBlogs] = useState<BlogType[]>(initialBlogs || []);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [initialized, setInitialized] = useState(false);
   const observerRef = useRef<HTMLDivElement | null>(null);
 
+  const storageKey = buildBlogListStorageKey(category, filters);
+  const scrollKey = buildBlogListScrollKey(category, filters);
+
+  const updateUrl = useCallback(
+    (nextFilters: BlogListFilters) => {
+      const nextUrl = `${buildBlogListPath(category)}${buildBlogListUrlQueryString(nextFilters)}`;
+      router.replace(nextUrl, { scroll: false });
+    },
+    [category, router]
+  );
+
+  const fetchAndSetBlogs = useCallback(
+    async (offset: number, append: boolean, activeFilters: BlogListFilters) => {
+      setLoading(true);
+      const options = buildBlogListQueryOptions(activeFilters);
+      const newBlogs = await fetchBlogs(LIMIT, offset, category, options);
+
+      setHasMore(newBlogs.length >= LIMIT);
+      setBlogs((prev) => {
+        const allBlogs = append ? [...prev, ...newBlogs] : newBlogs;
+        return Array.from(
+          new Map(allBlogs.map((blog) => [blog.id, blog])).values()
+        );
+      });
+      setLoading(false);
+    },
+    [category, fetchBlogs]
+  );
+
+  const resetAndFetch = useCallback(
+    async (nextFilters: BlogListFilters) => {
+      window.scrollTo(0, 0);
+      sessionStorage.removeItem(scrollKey);
+      setHasMore(true);
+      await fetchAndSetBlogs(0, false, nextFilters);
+    },
+    [fetchAndSetBlogs, scrollKey]
+  );
+
+  const applyFilters = useCallback(
+    (partial: Partial<BlogListFilters>) => {
+      const nextFilters: BlogListFilters = {
+        ...filters,
+        ...partial,
+      };
+
+      if ("dateFrom" in partial || "dateTo" in partial) {
+        const normalized = normalizeDateRange(
+          nextFilters.dateFrom,
+          nextFilters.dateTo
+        );
+        nextFilters.dateFrom = normalized.dateFrom;
+        nextFilters.dateTo = normalized.dateTo;
+      }
+
+      const isSame =
+        nextFilters.query === filters.query &&
+        nextFilters.sort === filters.sort &&
+        nextFilters.dateFrom === filters.dateFrom &&
+        nextFilters.dateTo === filters.dateTo;
+
+      if (isSame) return;
+
+      setFilters(nextFilters);
+      updateUrl(nextFilters);
+      void resetAndFetch(nextFilters);
+    },
+    [filters, resetAndFetch, updateUrl]
+  );
+
   /**
-   * セッションストレージからの初期データ読み込み（1時間の有効期限チェック付き）
+   * URL パラメータがある場合は初期データを再取得
    */
   useEffect(() => {
-    const storageKey = category ? category : "blogList";
+    if (initialized) return;
+
+    if (hasActiveFilters(initialFilters)) {
+      void resetAndFetch(initialFilters);
+      setInitialized(true);
+      return;
+    }
+
     const savedData = sessionStorage.getItem(storageKey);
 
     if (savedData) {
@@ -44,76 +143,63 @@ export default function BlogListClient({
         const cached: CachedData = JSON.parse(savedData);
         const now = Date.now();
 
-        // 1時間経過しているかチェック
         if (cached.timestamp && now - cached.timestamp < CACHE_EXPIRY_TIME) {
-          // 有効期限内ならデータを使用
           setBlogs(cached.blogs);
+          setHasMore(cached.blogs.length % LIMIT === 0);
         } else {
-          // 1時間経過していたらセッションストレージをクリア
           sessionStorage.removeItem(storageKey);
           setBlogs(initialBlogs);
         }
-      } catch (e) {
-        // パースエラーなら削除
+      } catch {
         sessionStorage.removeItem(storageKey);
         setBlogs(initialBlogs);
       }
     } else {
       setBlogs(initialBlogs);
     }
-  }, [category, initialBlogs]);
+
+    setInitialized(true);
+  }, [initialBlogs, initialFilters, initialized, resetAndFetch, storageKey]);
 
   /**
    * セッションストレージへの保存（タイムスタンプ付き）
    */
   useEffect(() => {
-    if (blogs.length > 0) {
-      const uniqueBlogs = Array.from(
-        new Map(blogs.map((blog) => [blog.id, blog])).values()
-      );
-      const storageKey = category ? category : "blogList";
-      const cachedData: CachedData = {
-        blogs: uniqueBlogs,
-        timestamp: Date.now(),
-      };
-      sessionStorage.setItem(storageKey, JSON.stringify(cachedData));
-    }
-  }, [blogs, category]);
+    if (!initialized || blogs.length === 0) return;
+
+    const uniqueBlogs = Array.from(
+      new Map(blogs.map((blog) => [blog.id, blog])).values()
+    );
+    const cachedData: CachedData = {
+      blogs: uniqueBlogs,
+      timestamp: Date.now(),
+    };
+    sessionStorage.setItem(storageKey, JSON.stringify(cachedData));
+  }, [blogs, initialized, storageKey]);
 
   /**
    * 無限スクロール
    */
   const loadMore = useCallback(async () => {
     if (loading || !hasMore) return;
-    setLoading(true);
-    const nextOffset = blogs.length;
-    const newBlogs = await fetchBlogs(LIMIT, nextOffset, category);
-    if (newBlogs.length < LIMIT) setHasMore(false);
-    setBlogs((prev) => {
-      const allBlogs = [...prev, ...newBlogs];
-      const uniqueBlogs = Array.from(
-        new Map(allBlogs.map((blog) => [blog.id, blog])).values()
-      );
-      return uniqueBlogs;
-    });
-    setLoading(false);
-  }, [loading, hasMore, blogs, category, fetchBlogs]);
+    await fetchAndSetBlogs(blogs.length, true, filters);
+  }, [blogs.length, fetchAndSetBlogs, filters, hasMore, loading]);
 
-  // observer
   useEffect(() => {
     if (!hasMore) return;
 
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
-        loadMore();
+        void loadMore();
       }
     });
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
+    const target = observerRef.current;
+    if (target) {
+      observer.observe(target);
     }
     return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
+      if (target) {
+        observer.unobserve(target);
       }
     };
   }, [hasMore, loadMore]);
@@ -122,22 +208,18 @@ export default function BlogListClient({
    * スクロール位置の復元（コンポーネントマウント時）
    */
   useEffect(() => {
-    // 保存されたスクロール位置を復元
-    const savedScrollPosition = sessionStorage.getItem(
-      category ? `${category}-scrollPosition` : "scrollPosition"
-    );
+    const savedScrollPosition = sessionStorage.getItem(scrollKey);
     if (savedScrollPosition && parseInt(savedScrollPosition) > 0) {
       setTimeout(() => {
         window.scrollTo(0, parseInt(savedScrollPosition));
       }, 100);
     }
-  }, []);
+  }, [scrollKey]);
 
   /**
-   * スクロール位置の保存と復元
+   * スクロール位置の保存
    */
   useEffect(() => {
-    // スクロール位置を取得する関数
     const getScrollPosition = () => {
       return (
         window.scrollY ||
@@ -148,31 +230,50 @@ export default function BlogListClient({
       );
     };
 
-    // スクロールイベントでリアルタイム保存
     const handleScroll = () => {
       const currentScrollPosition = getScrollPosition();
       if (currentScrollPosition > 0) {
-        sessionStorage.setItem(
-          category ? `${category}-scrollPosition` : "scrollPosition",
-          currentScrollPosition.toString()
-        );
+        sessionStorage.setItem(scrollKey, currentScrollPosition.toString());
       }
     };
     window.addEventListener("scroll", handleScroll);
 
-    // クリーンアップ
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [scrollKey]);
 
   return (
     <>
-      <ul>
-        {blogs.map((blog) => (
-          <BlogItem key={blog.id} blogData={blog} />
-        ))}
-      </ul>
+      <BlogFilterPanel
+        filters={filters}
+        category={category}
+        initialOpen={hasActiveFilters(filters)}
+      >
+        <CategorySelector visiting={category} />
+        <BlogFilterBar
+          query={filters.query}
+          sort={filters.sort}
+          dateFrom={filters.dateFrom}
+          dateTo={filters.dateTo}
+          onQueryChange={(query) => applyFilters({ query })}
+          onSortChange={(sort) => applyFilters({ sort })}
+          onDateRangeChange={(dateFrom, dateTo) =>
+            applyFilters({ dateFrom, dateTo })
+          }
+        />
+      </BlogFilterPanel>
+      {blogs.length === 0 && !loading ? (
+        <p className="py-8 text-center text-sm opacity-70">
+          該当する記事がありません
+        </p>
+      ) : (
+        <ul>
+          {blogs.map((blog) => (
+            <BlogItem key={blog.id} blogData={blog} />
+          ))}
+        </ul>
+      )}
       {hasMore && <div ref={observerRef} className="h-px" />}
       {loading && <Spinner />}
     </>
