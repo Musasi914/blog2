@@ -10,6 +10,7 @@ import {
   filterFieldClassName,
   filterFieldWrapperClassName,
   filterLabelClassName,
+  filterMonthFieldClassName,
   filterSelectClassName,
   filterSelectStyle,
 } from "./filterFieldStyles";
@@ -61,7 +62,7 @@ export default function BlogFilterBar({
     dateFrom && dateFrom >= BLOG_MONTH_MIN ? dateFrom : BLOG_MONTH_MIN;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex w-full min-w-0 max-w-full flex-col gap-4 overflow-x-clip">
       <label className={filterFieldWrapperClassName}>
         <span className={filterLabelClassName}>キーワード</span>
         <input
@@ -75,7 +76,7 @@ export default function BlogFilterBar({
         />
       </label>
 
-      <div className="flex flex-col sm:flex-row gap-4 sm:items-end">
+      <div className="grid w-full min-w-0 max-w-full grid-cols-1 gap-4 sm:flex sm:flex-row sm:items-end">
         <label className={filterFieldWrapperClassName}>
           <span className={filterLabelClassName}>開始月</span>
           <input
@@ -85,11 +86,11 @@ export default function BlogFilterBar({
             max={dateFromMax}
             onChange={(e) => onDateRangeChange(e.target.value, dateTo)}
             aria-label="開始月"
-            className={filterFieldClassName}
+            className={filterMonthFieldClassName}
           />
         </label>
 
-        <span className="hidden sm:block pb-2.5 opacity-70">〜</span>
+        <span className="hidden sm:block shrink-0 pb-2.5 opacity-70">〜</span>
 
         <label className={filterFieldWrapperClassName}>
           <span className={filterLabelClassName}>終了月</span>
@@ -100,7 +101,7 @@ export default function BlogFilterBar({
             max={monthMax}
             onChange={(e) => onDateRangeChange(dateFrom, e.target.value)}
             aria-label="終了月"
-            className={filterFieldClassName}
+            className={filterMonthFieldClassName}
           />
         </label>
 

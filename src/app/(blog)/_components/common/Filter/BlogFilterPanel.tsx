@@ -62,7 +62,7 @@ export default function BlogFilterPanel({
   const summary = buildFilterSummary(filters, category);
 
   return (
-    <div className="mb-4">
+    <div className="mb-4 w-full min-w-0 max-w-full overflow-x-clip">
       <button
         type="button"
         className={`${filterFieldClassName} sm:hidden flex items-center justify-between gap-2 cursor-pointer text-left`}
@@ -95,7 +95,7 @@ export default function BlogFilterPanel({
 
       <div
         id="blog-filter-panel"
-        className={`flex flex-col gap-4 ${open ? "flex" : "hidden"} sm:flex`}
+        className={`flex w-full min-w-0 max-w-full flex-col gap-4 overflow-x-clip ${open ? "flex" : "hidden"} sm:flex`}
       >
         {children}
       </div>

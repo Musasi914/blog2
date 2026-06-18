@@ -1,7 +1,9 @@
 export const filterLabelClassName = "mb-1 block opacity-70";
 
 export const filterFieldClassName =
-  "w-full border text-sm rounded-lg block p-2.5 bg-background border-gray-600 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500";
+  "w-full min-w-0 max-w-full box-border border text-sm rounded-lg block p-2.5 bg-background border-gray-600 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500";
+
+export const filterMonthFieldClassName = `${filterFieldClassName} blog-filter-month overflow-hidden`;
 
 export const filterSelectClassName = `${filterFieldClassName} cursor-pointer appearance-none`;
 
@@ -13,4 +15,5 @@ export const filterSelectStyle = {
   backgroundSize: "1.5em 1.5em",
 };
 
-export const filterFieldWrapperClassName = "flex-1 text-sm";
+export const filterFieldWrapperClassName =
+  "block w-full min-w-0 max-w-full text-sm sm:flex-1";

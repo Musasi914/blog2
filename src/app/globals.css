@@ -16,4 +16,17 @@
     color: var(--foreground);
     background: var(--background);
   }
+
+  input[type="month"].blog-filter-month {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  input[type="month"].blog-filter-month::-webkit-datetime-edit,
+  input[type="month"].blog-filter-month::-webkit-datetime-edit-fields-wrapper {
+    min-width: 0;
+    padding: 0;
+  }
 }
