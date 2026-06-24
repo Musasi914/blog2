@@ -2,6 +2,7 @@
 
 import type { SerializablePushSubscription } from "@/types/PushSubscriptionType";
 import webpush from "web-push";
+import { isTrustedPushSubscription } from "./validatePushSubscription";
 
 webpush.setVapidDetails(
   "mailto:sopmod120@gmail.com",
@@ -21,8 +22,8 @@ export async function sendNotification(
   subscription: SerializablePushSubscription | null,
   message: string
 ) {
-  if (!subscription) {
-    throw new Error("No subscription available");
+  if (!isTrustedPushSubscription(subscription)) {
+    throw new Error("Invalid push subscription");
   }
 
   try {
